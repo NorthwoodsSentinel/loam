@@ -1,16 +1,24 @@
 #!/usr/bin/env bun
-// Ingest a Claude.ai data export into Loam.
-// Use parameterized D1 REST API calls — handles arbitrary content cleanly.
-// Idempotent: re-running on the same export is safe (INSERT OR REPLACE).
-//
-// Usage: bun ingest/claude.ts <conversations.json path> [raw_path-tag]
-// Env required:
-//   CLOUDFLARE_API_TOKEN   - your CF API token (D1 read+write scope)
-//   LOAM_ACCOUNT_ID        - your CF account ID
-//   LOAM_DB_ID             - your loam D1 database UUID
-//
-// Get an export: claude.ai → Settings → Account → Privacy → Export data.
-// You'll receive an email with a download link; the zip contains conversations.json.
+/*
+ * Loam. Claude.ai export ingestion.
+ *
+ * claude.ai > Settings > Account > Privacy > Export data > email link > zip.
+ * Inside that zip: conversations.json. Inside that: every conversation
+ * you've had with Claude on the web.
+ *
+ * This script reads the export, normalizes the schema, writes it into
+ * your Loam. Parameterized D1 calls so arbitrary content (newlines,
+ * quotes, long blobs, your raw thinking) lands cleanly. Idempotent:
+ * re-running on the same export is safe.
+ *
+ * The history was always yours. This just gives you a place to keep it.
+ *
+ * Usage: bun ingest/claude.ts <conversations.json path> [raw_path-tag]
+ * Env required:
+ *   CLOUDFLARE_API_TOKEN   your CF API token (D1 read+write scope)
+ *   LOAM_ACCOUNT_ID        your CF account ID
+ *   LOAM_DB_ID             your loam D1 database UUID
+ */
 
 import { readFileSync } from "fs";
 

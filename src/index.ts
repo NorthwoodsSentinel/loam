@@ -1,15 +1,29 @@
-// Loam — the memory substrate for personal AI.
-// Cloudflare Worker exposing search + retrieval over your own AI history corpus.
-// Stack: D1 (FTS5 full-text search) + R2 (raw archive) + Worker (auth + UI).
-// Bring Your Own Cloudflare. Your data, your account, your sovereignty.
-//
-// Routes:
-//   GET /                    → HTML UI
-//   GET /healthz             → liveness (no auth)
-//   GET /search?q=&source=&from=&to=&limit=
-//   GET /conversation/:id    → full thread JSON
-//   GET /stats               → counts + dimensions
-//   GET /sources             → list of distinct sources
+/*
+ * Loam. The memory substrate for personal AI.
+ *
+ *   "Memory ages. Loam ripens."
+ *
+ * This Worker exposes search and retrieval over your AI history corpus,
+ * running on YOUR Cloudflare account. The product is the substrate.
+ * What's underneath whatever AI you build, query, or think on top of.
+ *
+ * Three things matter in a query worker:
+ *   1. The data is yours.    FTS5 over your own D1.
+ *   2. The auth is yours.    Bearer token in your own env.
+ *   3. The substrate is yours. The code is open. Audit it before you trust it.
+ *
+ * Stack: D1 (FTS5 full-text search) + R2 (raw archive) + Worker (auth + UI).
+ *
+ * Routes:
+ *   GET /                     HTML UI
+ *   GET /healthz              liveness (no auth)
+ *   GET /search?q=...         keyword search across the corpus
+ *   GET /conversation/:id     full thread JSON
+ *   GET /stats                counts and dimensions
+ *   GET /sources              list of distinct sources
+ *
+ * The soil holds.
+ */
 
 interface Env {
   DB: D1Database;
@@ -36,12 +50,15 @@ function authed(req: Request, env: Env): boolean {
   return got === env.AUTH_TOKEN;
 }
 
-// FTS5 special chars that cause syntax errors when present in user input.
-// Auto-fallback: if raw query throws, retry with the query wrapped as a phrase.
+// FTS5 has its own grammar. A few characters (hyphens, asterisks, colons,
+// parens, quotes) carry meaning to the parser. User intent is rarely that.
+// When raw input fails, we retry the same query as a literal phrase before
+// surfacing the error. The user said it; we shouldn't reject the wording.
 const FTS_SPECIALS = /[-^*:()"]/;
 
 function sanitizeFtsPhrase(q: string): string {
-  // Wrap user input as an FTS5 phrase. Strip embedded double-quotes since they break the wrapping.
+  // Strip embedded double-quotes, wrap the rest as a phrase. Loses operators
+  // but preserves the words the user actually typed.
   return `"${q.replace(/"/g, "")}"`;
 }
 
@@ -196,6 +213,7 @@ const UI = `<!doctype html>
   .msg.human { border-left: 3px solid var(--accent); padding-left: 12px; }
   .msg.assistant { border-left: 3px solid #6c757d; padding-left: 12px; }
   footer { color: var(--muted); font-size: 12px; padding: 24px; text-align: center; }
+  footer em { color: var(--muted); font-style: italic; }
 </style>
 </head>
 <body>
@@ -216,7 +234,7 @@ const UI = `<!doctype html>
   <div id="results"></div>
 </main>
 <div class="modal" id="modal"><div class="panel" id="modalPanel"></div></div>
-<footer>Loam · FTS5 over your personal AI history · D1 + R2 on your Cloudflare</footer>
+<footer>Loam · the soil layer · running on your land · <em>memory ages, loam ripens</em></footer>
 <script>
 const URL_TOKEN = new URLSearchParams(location.search).get('token') || '';
 if (URL_TOKEN) {
@@ -331,7 +349,8 @@ export default {
       return new Response(UI, { headers: HEADERS_HTML });
     }
     if (url.pathname === "/healthz") {
-      return json({ ok: true, name: "loam" });
+      // small, quiet. proves the worker is awake without leaking anything.
+      return json({ ok: true, name: "loam", note: "the soil holds" });
     }
 
     if (!authed(req, env)) {

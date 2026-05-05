@@ -1,7 +1,7 @@
 {
   "name": "loam",
   "version": "0.1.0",
-  "description": "Loam — the memory substrate for personal AI. Search your AI history on your own Cloudflare. BYOK sovereignty.",
+  "description": "Loam. The memory substrate for personal AI. Search your AI history on your own Cloudflare. BYOK sovereignty. The soil layer beneath whatever you build on top.",
   "type": "module",
   "license": "MIT",
   "scripts": {

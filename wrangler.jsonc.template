@@ -1,11 +1,16 @@
 {
-  // Loam — Cloudflare Worker config template.
-  // Copy to wrangler.jsonc and fill in YOUR_* placeholders.
+  // Loam. Cloudflare Worker config template.
+  //
+  // Copy to wrangler.jsonc and fill in YOUR_* placeholders. The defaults
+  // here are deliberate: small, single-region, your-account-only. No
+  // analytics, no bundlers, no marketing pixels in the deploy path. The
+  // substrate stays quiet.
+  //
   // Get account/database IDs from:
   //   wrangler whoami                     (account ID)
   //   wrangler d1 create loam             (creates D1, prints database_id)
   //   wrangler r2 bucket create loam      (creates R2 bucket)
-  //   wrangler secret put AUTH_TOKEN      (sets bearer token; generate with `openssl rand -hex 32`)
+  //   wrangler secret put AUTH_TOKEN      (sets bearer token; openssl rand -hex 32 is good)
 
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "loam",

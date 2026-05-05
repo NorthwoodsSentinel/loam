@@ -1,6 +1,16 @@
--- Loam — D1 schema
--- The memory substrate for personal AI. FTS5 search over multi-source corpus.
--- Sources: claude (Claude.ai exports), chatgpt, gemini, perplexity, files (markdown notes), etc.
+-- Loam. D1 schema.
+--
+-- Three tables and one virtual layer:
+--   conversations       what counts as a unit of thinking
+--   messages            the texture inside the unit
+--   messages_fts        the search layer that finds what you forgot you knew
+--   ingestions          a ledger of what was buried, when, from where
+--
+-- Healthy soil is mixed. Sources: claude, chatgpt, gemini, perplexity, your
+-- own notes and journals, anything you bring. The schema doesn't care which.
+-- It cares that the message_id is unique and the position is honest.
+--
+-- "Memory ages. Loam ripens."
 
 CREATE TABLE IF NOT EXISTS conversations (
   id              TEXT PRIMARY KEY,

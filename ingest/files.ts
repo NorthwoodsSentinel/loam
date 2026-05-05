@@ -1,14 +1,25 @@
 #!/usr/bin/env bun
-// Ingest a directory of markdown/text files into Loam as a custom source.
-// Each file becomes one "conversation" with a single document message.
-// Idempotent (deterministic ID from file path).
-//
-// Usage: bun ingest/files.ts <source-tag> <root-dir> [--exclude=name1,name2]
-// Env required: CLOUDFLARE_API_TOKEN, LOAM_ACCOUNT_ID, LOAM_DB_ID.
-//
-// Examples:
-//   bun ingest/files.ts notes ./my-notes
-//   bun ingest/files.ts journal ./journal --exclude=draft.md,private.md
+/*
+ * Loam. Markdown directory ingestion.
+ *
+ * Point this at any folder of .md or .txt notes (journal, knowledge base,
+ * fleet memory, capture inbox) and the contents become a searchable source
+ * in your Loam alongside your AI history. Each file becomes one searchable
+ * unit. Frontmatter title is honored if present, otherwise the filename.
+ *
+ * Mix your AI conversations and your handwritten thinking in the same loam.
+ * They belong together. The substrate doesn't care which voice it carries.
+ *
+ * Idempotent. The ID is a SHA-1 of the file path, so re-running on the same
+ * directory is safe and updates content in place.
+ *
+ * Usage: bun ingest/files.ts <source-tag> <root-dir> [--exclude=name1,name2]
+ * Env required: CLOUDFLARE_API_TOKEN, LOAM_ACCOUNT_ID, LOAM_DB_ID.
+ *
+ * Examples:
+ *   bun ingest/files.ts notes ./my-notes
+ *   bun ingest/files.ts journal ./journal --exclude=draft.md,private.md
+ */
 
 import { readFileSync, statSync, readdirSync } from "fs";
 import { join, basename, relative } from "path";
