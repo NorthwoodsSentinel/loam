@@ -75,7 +75,10 @@ git clone https://github.com/NorthwoodsSentinel/loam.git
 cd loam
 npm install
 
-# Authenticate
+# Authenticate. Either:
+#   wrangler login                                      (browser flow on a desktop)
+# OR:
+#   export CLOUDFLARE_API_TOKEN=...                     (token from dash.cloudflare.com/profile/api-tokens; for headless / server / container)
 wrangler login
 
 # Create the resources on YOUR account
