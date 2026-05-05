@@ -20,12 +20,22 @@ CREATE TABLE IF NOT EXISTS conversations (
   updated_at      TEXT,
   message_count   INTEGER DEFAULT 0,
   raw_path        TEXT,
-  imported_at     TEXT NOT NULL DEFAULT (datetime('now'))
+  imported_at     TEXT NOT NULL DEFAULT (datetime('now')),
+
+  -- Provenance + sensitivity tagging. Future security features (egress
+  -- redaction, per-AI scoped tokens, hardware-key gates) read these.
+  -- Defaults lean conservative; opt in to relaxation per your trust model.
+  -- See migrations/0001_provenance_and_sensitivity.sql for the upgrade path
+  -- on an existing Loam.
+  trust_level     TEXT NOT NULL DEFAULT 'untrusted',  -- untrusted | mixed | trusted
+  sensitivity     TEXT NOT NULL DEFAULT 'personal'    -- public | personal | memoir-class | secret
 );
 
 CREATE INDEX IF NOT EXISTS idx_conv_source       ON conversations(source);
 CREATE INDEX IF NOT EXISTS idx_conv_created      ON conversations(created_at);
 CREATE INDEX IF NOT EXISTS idx_conv_source_dt    ON conversations(source, created_at);
+CREATE INDEX IF NOT EXISTS idx_conv_trust        ON conversations(trust_level);
+CREATE INDEX IF NOT EXISTS idx_conv_sensitivity  ON conversations(sensitivity);
 
 CREATE TABLE IF NOT EXISTS messages (
   id              TEXT PRIMARY KEY,

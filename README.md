@@ -89,8 +89,11 @@ wrangler r2 bucket create loam
 cp wrangler.jsonc.template wrangler.jsonc
 # Edit wrangler.jsonc — replace YOUR_D1_DATABASE_ID
 
-# Apply the schema
+# Apply the schema (fresh deploys)
 wrangler d1 execute loam --remote --file=schema.sql
+
+# OR, if you deployed before 2026-05-05, apply the provenance migration:
+# wrangler d1 execute loam --remote --file=migrations/0001_provenance_and_sensitivity.sql
 
 # Set the bearer token (generate any random string; this gates your search)
 openssl rand -hex 32 | wrangler secret put AUTH_TOKEN
