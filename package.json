@@ -1,0 +1,19 @@
+{
+  "name": "loam",
+  "version": "0.1.0",
+  "description": "Loam — the memory substrate for personal AI. Search your AI history on your own Cloudflare. BYOK sovereignty.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "schema": "wrangler d1 execute loam --remote --file=schema.sql",
+    "ingest:claude": "bun ingest/claude.ts",
+    "ingest:files": "bun ingest/files.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240725.0",
+    "wrangler": "^3.78.0",
+    "typescript": "^5.5.0"
+  }
+}

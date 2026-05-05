@@ -1,0 +1,29 @@
+{
+  // Loam — Cloudflare Worker config template.
+  // Copy to wrangler.jsonc and fill in YOUR_* placeholders.
+  // Get account/database IDs from:
+  //   wrangler whoami                     (account ID)
+  //   wrangler d1 create loam             (creates D1, prints database_id)
+  //   wrangler r2 bucket create loam      (creates R2 bucket)
+  //   wrangler secret put AUTH_TOKEN      (sets bearer token; generate with `openssl rand -hex 32`)
+
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "loam",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "loam",
+      "database_id": "YOUR_D1_DATABASE_ID"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ARCHIVES",
+      "bucket_name": "loam"
+    }
+  ]
+}

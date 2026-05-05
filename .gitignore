@@ -1,0 +1,19 @@
+node_modules/
+node_modules
+.wrangler/
+.tmp-build/
+.env
+.env.local
+.dev.vars
+wrangler.jsonc
+*.log
+.DS_Store
+.idea/
+.vscode/
+dist/
+*.local
+
+# Personal data — never commit
+exports/
+*.zip
+test-results-*.json
