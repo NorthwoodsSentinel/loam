@@ -16,11 +16,24 @@ loam, n.
 
 ## Why this exists
 
-Most AI tools forget you between conversations. ChatGPT memory is intra-platform. Claude Projects don't reach across providers. Daniel Miessler's PAi framework articulates the shape but doesn't ship the substrate. And every memory product so far asks you to upload your data into *their* cloud.
+You probably use more than one AI tool. Maybe you started with ChatGPT and added Claude. Maybe you drifted through Pi and Replika and Character.AI. Maybe you're deep in Claude Code, Cursor, or a custom agent built on Fabric. Each tool keeps a fragment of your history. None keep all of it.
 
-Loam is different. **Bring your own Cloudflare.** Your data, your D1, your R2, your search. Nothing lives on infrastructure you don't own.
+And as you grow — mature out of one tool, move to another, run several at once — your context fragments further. The thinking you did six months ago in ChatGPT is invisible to the agent you're working with today. Every conversation starts from zero.
 
-The product is the substrate underneath. Whatever AI you talk to — Claude, ChatGPT, Cursor, your custom agent — Loam can be the layer that gives them memory of who you are, what you've thought, and what you care about.
+**Loam is the layer underneath that holds it all.** Your AI conversation history from every platform you've used. Your notes, journal, knowledge base. Searchable from one interface, queryable from any AI tool you bring to it.
+
+### The data lives on YOUR Cloudflare account
+
+There are no Loam servers holding your data. **The Loam authors never see what you upload.** Your D1 database, your R2 storage, your bearer token, your account. We give you the code; you run it on your infrastructure.
+
+If Cloudflare or this project disappears tomorrow, your data is still yours, your Worker is still your Worker, your search still works. Sovereignty isn't a feature here — it's the architecture.
+
+### Why this matters for Claude Code, Cursor, and any AI tool you use
+
+- **Claude Code:** *"what did we figure out last week about X?"* — Loam can answer from your actual history instead of guessing from short context
+- **Cursor / coding agents:** project context that lives outside the codebase, queryable from inside it
+- **Fabric / custom agents:** values, themes, prior conversations — pull substrate-shaped context into any pattern
+- **Whatever comes next:** the per-user MCP server endpoint (on the roadmap) makes this plug-and-play — any MCP-aware client can read your Loam directly
 
 ## What Loam does today
 
