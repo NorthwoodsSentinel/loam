@@ -127,7 +127,23 @@ bun ingest/files.ts mynotes /path/to/your/notes
 
 The `mynotes` argument becomes the source tag — searches can filter by it.
 
-### ChatGPT, Gemini, Perplexity
+### ChatGPT
+
+```bash
+# At chatgpt.com → Settings → Data Controls → Export data → email link → zip
+# Inside the zip: conversations.json
+bun ingest/chatgpt.ts /path/to/conversations.json
+```
+
+### Gemini (Google Takeout)
+
+```bash
+# At takeout.google.com → Bard/Gemini → Export
+# Inside the zip: Takeout/Bard/MyActivity.json
+bun ingest/gemini.ts /path/to/MyActivity.json
+```
+
+### Perplexity
 
 Coming soon. Same pattern: export from the platform, run an ingest script, content lands in Loam under that source tag. Open issues / PRs welcome.
 
