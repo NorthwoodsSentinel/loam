@@ -16,7 +16,9 @@ loam, n.
 
 ## Why this exists
 
-You probably use more than one AI tool. Maybe you started with ChatGPT and added Claude. Maybe you drifted through Replika and Character.AI. Maybe you're deep in Claude Code, Cursor, or a custom agent built on Fabric. Maybe you're building toward a PAi in Daniel Miessler's shape. Each tool keeps a fragment of your history. None keep all of it.
+You probably use more than one AI tool. Maybe you started with ChatGPT and added Claude. Maybe you've moved between Gemini and Perplexity. Maybe you're deep in Claude Code, Cursor, or a custom agent built on Fabric. Maybe you're building toward a PAi in Daniel Miessler's shape. Each tool keeps a fragment of your history. None keep all of it.
+
+(Loam ingests from any tool that lets you export your data. ChatGPT, Claude, Gemini, and Perplexity all have export pipelines today. Tools that don't have exports yet — that's a problem with the tool, not with Loam.)
 
 And as you grow — mature out of one tool, move to another, run several at once — your context fragments further. The thinking you did six months ago in ChatGPT is invisible to the agent you're working with today. Every conversation starts from zero.
 
