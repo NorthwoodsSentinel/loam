@@ -8,53 +8,72 @@ Draft copy for the public launch. Rob reviews + ships.
 
 **Channel:** `#projects` or `#show-and-tell` or whichever fits the community structure.
 
-**Length:** short. Power users reward signal density.
-
 ---
 
-> **Loam — the memory substrate for personal AI.** I built this for myself; the convergence with Daniel's PAI work was so clean I figured the audience here would want it.
+> **Loam — the memory substrate for personal AI.** I built this for myself; the convergence with Daniel's PAi work was so clean I figured the audience here would want it.
 >
 > The premise: most AI memory products ask you to upload your data to *their* cloud. Loam runs on YOUR Cloudflare account. D1 + R2 + Worker, FTS5 search, BYOK. Bring your AI history (Claude.ai exports working today; ChatGPT/Gemini coming) plus any markdown directory of your notes/journal. Search across all of it sub-100ms.
 >
-> The goal isn't another memory tool. It's the substrate underneath whatever PAI you build — Fabric, your custom agent, Claude Desktop with MCP. Memory layer that's actually yours.
+> The goal isn't another memory tool. It's the substrate underneath whatever PAi you build — Fabric workflows, your custom agent, Claude Code, Claude Desktop with MCP. Memory layer that's actually yours. The Loam authors never see your data.
 >
 > Open source, MIT licensed. Deploy in ~5 minutes if you've got a Cloudflare account.
 >
-> Repo + deploy guide: `https://github.com/robertchuvala/loam`
+> Repo + deploy guide: `https://github.com/NorthwoodsSentinel/loam`
 >
 > Roadmap: Vectorize semantic search, proactive surfacing based on your values/themes, counter-thesis surfacing (*"things you've said that contradict your current thinking"* as a first-class feature), per-user MCP server endpoint so any AI you talk to can query your Loam directly.
 >
-> Feedback welcome. Especially want to hear from people building Fabric workflows — the MCP layer is designed to plug under that.
+> Feedback welcome. Especially want to hear from people building Fabric workflows or running Claude Code seriously — the MCP layer is designed to plug under both.
 >
 > *— Robert*
 
 ---
 
-## X / Twitter thread
+## X / Twitter (single post or unnumbered short-thread)
 
-**Length:** 8-12 tweets. Each tweet is a unit; thread tells a story.
+**Length:** keep tight. No "1/ 2/ 3/" numbering — just flowing prose. Either one long post or a few separate tweets posted as a thread without enumeration.
 
 ---
 
-1/ I built **Loam** — the memory substrate for personal AI. Bring Your Own Cloudflare. Your data stays sovereign. Search across your AI history + any notes you keep. Open source.
+### Single-post version
 
-2/ The premise: every AI memory product so far asks you to upload your data into *their* cloud. ChatGPT memory is intra-platform. Claude Projects don't reach across providers. Mem.ai and Reflect host your second brain themselves.
+> **Loam** — the memory substrate for personal AI.
+>
+> Most AI tools forget you between sessions. ChatGPT memory stays inside ChatGPT. Claude Projects don't cross providers. Every memory product asks you to upload your data into *their* cloud.
+>
+> Loam runs on YOUR Cloudflare account. D1 + R2 + Worker. FTS5 search across your full AI history plus any notes you keep. Bring Your Own Cloudflare. The Loam authors never see your data.
+>
+> Built in homage to @DanielMiessler's PAi thinking and Fabric. Loam isn't a competing PAi — it's the memory layer underneath any PAi implementation (or Claude Code, or Cursor, or your custom agent).
+>
+> Roadmap: semantic search, values-based proactive surfacing, counter-thesis surfacing, per-user MCP endpoint.
+>
+> MIT licensed. Deploy in 5 minutes:
+> github.com/NorthwoodsSentinel/loam
+>
+> *Memory ages. Loam ripens.*
 
-3/ Loam runs on YOUR Cloudflare account. D1 + R2 + Worker. FTS5 search. Bearer-token auth. Nothing lives on infrastructure you don't own. The Loam authors never see your data.
+---
 
-4/ Today: ingest Claude.ai exports + any markdown directory. Sub-100ms search across both, with date and source filters, snippet highlighting, conversation drill-down.
+### Threaded version (separate tweets, no numbering)
 
-5/ Coming soon: ChatGPT/Gemini ingestion. Vectorize semantic search. Proactive surfacing based on your values/themes (different from "search" — system brings relevant past content unprompted).
+> Built **Loam** — the memory substrate for personal AI. Bring Your Own Cloudflare. Your data stays sovereign. Open source, MIT.
 
-6/ The feature I haven't seen anywhere: **counter-thesis surfacing.** *"Things you've said in the past that contradict your current thinking."* First-class feature, not afterthought. Most memory tools are confirmation engines. This one will challenge you.
+> The premise: every AI memory product so far asks you to upload your data into *their* cloud. ChatGPT memory is intra-platform. Claude Projects don't reach across providers. Mem.ai and Reflect host your second brain themselves.
 
-7/ The deeper play: per-user MCP server endpoint. Whatever AI you talk to — Claude, Cursor, your custom agent — can query YOUR Loam for context. The substrate underneath your PAI implementation.
+> Loam runs on YOUR Cloudflare account. D1 + R2 + Worker. FTS5 search. Bearer-token auth. The Loam authors never see your data.
 
-8/ This is built in homage to @DanielMiessler's PAI thinking and Fabric. Loam isn't a competing PAI — it's the memory layer underneath any PAI implementation.
+> Today: ingest Claude.ai exports plus any markdown directory. Sub-100ms search across all your sources, with date and source filters, snippet highlighting, conversation drill-down.
 
-9/ MIT licensed. Deploy in 5 minutes if you've got a Cloudflare account: `github.com/robertchuvala/loam`
+> Coming: ChatGPT/Gemini ingestion. Vectorize semantic search. Proactive surfacing based on your values and themes — system brings relevant past content unprompted, not just on query.
 
-10/ *Memory ages. Loam ripens.*
+> The feature I haven't seen anywhere: **counter-thesis surfacing.** *"Things you've said in the past that contradict your current thinking."* First-class feature, not afterthought. Most memory tools are confirmation engines. This one will challenge you.
+
+> The deeper play: per-user MCP server endpoint. Whatever AI you talk to — Claude Code, Cursor, your custom agent — queries YOUR Loam for context. The substrate underneath your PAi implementation.
+
+> Built in homage to @DanielMiessler's PAi thinking and Fabric. Loam isn't a competing PAi — it's the memory layer underneath any PAi implementation.
+
+> MIT. Deploy in 5 minutes if you've got a Cloudflare account: github.com/NorthwoodsSentinel/loam
+
+> *Memory ages. Loam ripens.*
 
 ---
 
@@ -69,7 +88,7 @@ Save for later. NWS-shape post arguing the sovereignty thesis with Loam as the w
 If Loam gets traction, Rob may want to send a direct note to Daniel introducing it. **Don't pre-launch this.** Let the work circulate organically first; if Daniel picks it up, the follow-up DM has weight. If he doesn't, Rob can decide whether to reach out cold based on what happened.
 
 When ready, the message is short:
-> Daniel — built Loam in homage to your PAI thinking. Not a competing framework — the memory substrate underneath any PAI implementation. Cloudflare-native, BYOK, MIT licensed. Repo: github.com/robertchuvala/loam. Built deliberately to plug under Fabric users. Would love your read whenever you have cycles. — Rob
+> Daniel — built Loam in homage to your PAi thinking. Not a competing framework — the memory substrate underneath any PAi implementation. Cloudflare-native, BYOK, MIT licensed. Repo: github.com/NorthwoodsSentinel/loam. Built deliberately to plug under Fabric users. Would love your read whenever you have cycles. — Rob
 
 ---
 

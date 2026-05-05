@@ -69,7 +69,7 @@ You'll need:
 - 5 minutes
 
 ```bash
-git clone https://github.com/<your-fork>/loam.git
+git clone https://github.com/NorthwoodsSentinel/loam.git
 cd loam
 npm install
 
@@ -179,6 +179,6 @@ MIT. See [LICENSE](LICENSE).
 
 ---
 
-**Built by [Robert Chuvala](https://github.com/robertchuvala) and the fleet.**
+**Built by [Robert Chuvala](https://northwoodssentinel.com) at [Northwoods Sentinel](https://northwoodssentinel.com) and the fleet.**
 
 *Memory ages. Loam ripens.*
