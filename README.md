@@ -16,7 +16,7 @@ loam, n.
 
 ## Why this exists
 
-Most AI tools forget you between conversations. ChatGPT memory is intra-platform. Claude Projects don't reach across providers. Pi remembers some things. Most tools remember none. And every memory product so far asks you to upload your data into *their* cloud.
+Most AI tools forget you between conversations. ChatGPT memory is intra-platform. Claude Projects don't reach across providers. Daniel Miessler's PAi framework articulates the shape but doesn't ship the substrate. And every memory product so far asks you to upload your data into *their* cloud.
 
 Loam is different. **Bring your own Cloudflare.** Your data, your D1, your R2, your search. Nothing lives on infrastructure you don't own.
 
