@@ -12,8 +12,8 @@
     "ingest:files": "bun ingest/files.ts"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240725.0",
-    "wrangler": "^3.78.0",
+    "@cloudflare/workers-types": "^4.20260509.1",
+    "wrangler": "^4.90.0",
     "typescript": "^5.5.0"
   }
 }
