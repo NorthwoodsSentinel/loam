@@ -8,6 +8,12 @@
 // vitest-5 collapse fails, a missing summary fails. Codex's cases for the
 // guard (21-30) are in tools/attack-coverage.test.ts.
 //
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 34d5bb9a0dd2accf33ffbd51557b7f9a009ecb0e), then
+// edited in one line: the report names this repository ("loam: 2 of 3"). The
+// Codex attack cases named above stay in fleet-mcp; PROVENANCE-CHECK.md says
+// why they were not copied.
+//
 // ---- his header, unchanged ----
 // Unit tests for verify-coverage-scope.mjs (#2709): how a declared coverage
 // scope is expanded, how a report is compared against it, and the client
@@ -311,7 +317,7 @@ test("run(): the vitest-5 collapse to server/** fails (#2557)", async (t) => {
     log: () => {},
   });
   assert.equal(failures.length, 1);
-  assert.match(failures[0], /^fleet-mcp: 2 of 3 file\(s\)/);
+  assert.match(failures[0], /^loam: 2 of 3 file\(s\)/);
   assert.match(failures[0], /src\/components\/A\.tsx/);
   assert.match(failures[0], /core\/json\/a\.ts/);
 });

@@ -40,6 +40,13 @@
 // A YAML alias anywhere in a job stays a finding, exactly as he has it and for
 // his stated reason (see `unpinnedRefs`).
 //
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 011a04c44ce9769bd15f8bfa82cb27d89162e957); record: PROVENANCE-CHECK.md.
+// Edit 1's reason holds here as written: the checked commit is the one the
+// owner deploys as loam's Worker. One edit: the failure message cites
+// AGENTS.md instead of fleet-mcp's ticket. The design and ticket numbers
+// above (NOR-355, NOR-363) are fleet-mcp's.
+//
 // ---- his header, unchanged ----
 // Guard: every action a CREDENTIALED job runs is pinned to a commit SHA (#2484).
 //
@@ -347,7 +354,7 @@ export function main(root = repoRoot, hooks = {}) {
       `verify:action-pins — ${problems.length} problem(s); every action ref must be SHA-pinned:\n` +
         problems.join("\n") +
         "\n\nIn this repo every job, credentialed or not, runs only immutable refs" +
-        "\n(NOR-355; the source's rule covers credentialed jobs only). Pin each as" +
+        "\n(AGENTS.md; the source's rule covers credentialed jobs only). Pin each as" +
         "\n  uses: owner/repo@<40-hex sha> # vX.Y.Z" +
         "\nresolving the SHA and the exact release from the same tag lookup. A local" +
         "\n`./…` ref and a YAML alias are findings too: spell the pinned ref out.",

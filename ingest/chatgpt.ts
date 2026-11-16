@@ -41,7 +41,22 @@ if (!inputPath) {
   process.exit(1);
 }
 
-async function exec(sql: string, params: any[] = []): Promise<any> {
+// NOR-388, types only: these two declarations replace `any` (lint's
+// no-explicit-any). The values sent and the result returned are unchanged.
+/** A value bound to a `?` in a D1 query; `undefined` is sent as JSON null. */
+type D1Param = string | number | null | undefined;
+
+/** The part of a D1 REST API query response this script reads. */
+interface D1QueryResponse<T> {
+  success: boolean;
+  errors?: unknown;
+  result?: { results?: T[] }[];
+}
+
+async function exec<T = unknown>(
+  sql: string,
+  params: D1Param[] = [],
+): Promise<T[]> {
   const res = await fetch(API, {
     method: "POST",
     headers: {
@@ -50,7 +65,7 @@ async function exec(sql: string, params: any[] = []): Promise<any> {
     },
     body: JSON.stringify({ sql, params }),
   });
-  const j = (await res.json()) as any;
+  const j = (await res.json()) as D1QueryResponse<T>;
   if (!j.success) {
     throw new Error(
       `D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`,
@@ -66,10 +81,39 @@ const ROW_LIMIT = 750_000;
 const toIso = (epoch: number | null | undefined): string | null =>
   epoch ? new Date(epoch * 1000).toISOString() : null;
 
+// NOR-388, types only: the export's shape as this script reads it, in place
+// of `any`. Every field is optional: the file is the user's export, not ours.
+// `content` may also be a bare string in some exports; the walk below handles
+// that case, which this type does not spell out.
+interface ChatGptContent {
+  content_type?: string;
+  parts?: unknown[];
+  text?: unknown;
+}
+interface ChatGptMessage {
+  id?: string;
+  author?: { role?: string };
+  content?: ChatGptContent;
+  create_time?: number | null;
+}
+interface ChatGptNode {
+  parent?: string | null;
+  message?: ChatGptMessage | null;
+}
+interface ChatGptConversation {
+  id?: string;
+  conversation_id?: string;
+  title?: string;
+  current_node?: string | null;
+  mapping?: Record<string, ChatGptNode>;
+  create_time?: number | null;
+  update_time?: number | null;
+}
+
 // Walk a ChatGPT conversation's mapping from current_node back to root via parents,
 // then reverse to get the linear thread (the "active" path the user actually saw).
 function flattenConversation(
-  conv: any,
+  conv: ChatGptConversation,
 ): { id: string; role: string; content: string; created_at: string }[] {
   const mapping = conv.mapping || {};
   const order: string[] = [];
@@ -91,14 +135,14 @@ function flattenConversation(
     let content = "";
     const c = m.content;
     if (c?.content_type === "text" && Array.isArray(c.parts)) {
-      content = c.parts.filter((p: any) => typeof p === "string").join("\n");
+      content = c.parts.filter((p) => typeof p === "string").join("\n");
     } else if (c?.content_type === "code" && typeof c.text === "string") {
       content = c.text;
     } else if (
       c?.content_type === "multimodal_text" &&
       Array.isArray(c.parts)
     ) {
-      content = c.parts.filter((p: any) => typeof p === "string").join("\n");
+      content = c.parts.filter((p) => typeof p === "string").join("\n");
     } else if (typeof c === "string") {
       content = c;
     }
@@ -114,13 +158,18 @@ function flattenConversation(
 }
 
 console.log(`reading ${inputPath}…`);
-const conversations: any[] = JSON.parse(readFileSync(inputPath, "utf8"));
+const conversations: ChatGptConversation[] = JSON.parse(
+  readFileSync(inputPath, "utf8"),
+);
 console.log(`parsed ${conversations.length} conversations`);
 
-const existingIds = new Set<string>();
-const existing = await exec("SELECT id FROM conversations WHERE source = ?", [
-  SOURCE,
-]);
+// `string | undefined`: a conversation with neither id is looked up as
+// undefined, which matches nothing (as before; NOR-388, types only).
+const existingIds = new Set<string | undefined>();
+const existing = await exec<{ id: string }>(
+  "SELECT id FROM conversations WHERE source = ?",
+  [SOURCE],
+);
 for (const r of existing) existingIds.add(r.id);
 console.log(`already in Loam: ${existingIds.size} conversations`);
 

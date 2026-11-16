@@ -193,6 +193,25 @@ your AI exports
 └─────────────────────────┘
 ```
 
+## Development
+
+The checks every change must pass, run locally before pushing and by CI on every pull request:
+
+```bash
+npm ci
+npm run format       # Prettier, the auto-fixer
+npm run local:gate   # validate (action pins, guard tests, format check, lint, typecheck, tests, dry-run build), sign-off check, per-file coverage
+```
+
+Sign off every commit (`git commit -s`); the `DCO` check fails a pull request with an unsigned commit. `npm run build` bundles the Worker with `wrangler deploy --dry-run` against a copy of `wrangler.jsonc.template`; it deploys nothing and needs no Cloudflare credential. The rules for working in this repo are in [AGENTS.md](AGENTS.md); where they came from is in [PROVENANCE.md](PROVENANCE.md) and [PROVENANCE-CHECK.md](PROVENANCE-CHECK.md).
+
+| Path | What it is |
+| --- | --- |
+| `src/index.ts`, `src/index.test.ts` | The Worker and its tests |
+| `ingest/` | The ingest scripts (run with Bun) |
+| `scripts/` | The gate's guards (`verify-*`, `dco-check`) and their tests |
+| `.github/workflows/` | CI (`main.yml`, job `validate`) and the sign-off check (`dco.yml`, job `DCO`) |
+
 ## Project status
 
 Loam is early. The architecture is solid (running on real personal corpora at thousands of entries with sub-100ms search), but the public release is days old. Expect rough edges. Open issues, PRs, and feedback welcomed.

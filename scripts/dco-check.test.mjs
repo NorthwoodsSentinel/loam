@@ -17,6 +17,11 @@
 // 858418417bfc542d8d3f7d0b76416b4bfdcf5f8a). This paragraph is the only edit.
 // Run here by `npm run test:scripts`, one `node --test <file>` per file.
 // Record: PROVENANCE-CHECK.md, section 4.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 7fd4bd08dd3c7bddf14c1076ad7f2a7894ccec50); record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// and their ticket numbers and file references are that repo's.
 
 import { after, test } from "node:test";
 import assert from "node:assert/strict";

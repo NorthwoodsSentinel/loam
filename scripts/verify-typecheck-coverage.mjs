@@ -24,6 +24,15 @@
 // empty or failed inventory is a failure. Paths are compared canonically
 // (resolved, realpath'd, repo-relative), so a symlinked checkout passes and a
 // `<repo>-copy/...` path cannot stand for an in-repo file.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob fd9163fdd668cf2ead9aeb10040a0227ed43d20a; record:
+// PROVENANCE-CHECK.md), then edited. One edit: loam has three TypeScript
+// projects, not one (the Worker under Cloudflare's types, the ingest scripts
+// under Node's, and the test configuration), so `PROJECTS` names them,
+// `programFiles` takes the project to list, and `run` takes the union of
+// their programs. Each project is listed the same way and fails the same way;
+// a file is typechecked when any of them holds it.
 
 import { spawnSync } from "node:child_process";
 import { realpathSync } from "node:fs";
@@ -45,6 +54,16 @@ const repoRoot = path.resolve(
  */
 export const EXCLUDED = {};
 
+/**
+ * loam (NOR-388): the tsconfig projects `npm run typecheck` runs, each listed
+ * with `--listFilesOnly`. Kept in step with the `typecheck` script.
+ */
+export const PROJECTS = [
+  "tsconfig.json",
+  "ingest/tsconfig.json",
+  "tsconfig.tools.json",
+];
+
 const GLOB_CHARS = /[*?[\]{}!]/;
 const hasReason = (r) => typeof r === "string" && r.trim() !== "";
 const slash = (p) => p.split(path.sep).join("/");
@@ -62,17 +81,18 @@ export function tscEntry(root) {
 }
 
 /**
- * Run `tsc -p tsconfig.json --listFilesOnly` and return the repo-relative
+ * Run `tsc -p <project> --listFilesOnly` and return the repo-relative
  * files of the program that are inside the repo.
  *
  * @param {string} root
  * @param {string} tsc path to a tsc entry script
+ * @param {string} [project] loam (NOR-388): the project to list
  * @returns {{ files: string[] } | { failure: string }}
  */
-export function programFiles(root, tsc) {
+export function programFiles(root, tsc, project = "tsconfig.json") {
   const ran = spawnSync(
     process.execPath,
-    [tsc, "-p", "tsconfig.json", "--listFilesOnly"],
+    [tsc, "-p", project, "--listFilesOnly"],
     { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
   );
   if (ran.error)
@@ -81,13 +101,12 @@ export function programFiles(root, tsc) {
     return { failure: `the compiler was killed by ${ran.signal}` };
   if (ran.status !== 0)
     return {
-      failure: `the compiler exited ${ran.status}:\n${(ran.stdout + ran.stderr).trim()}`,
+      failure: `the compiler exited ${ran.status} on ${project}:\n${(ran.stdout + ran.stderr).trim()}`,
     };
   const records = ran.stdout.split(/\r?\n/).filter((l) => l !== "");
   if (records.length === 0)
     return {
-      failure:
-        "the compiler listed no files — an empty program is not evidence",
+      failure: `the compiler listed no files for ${project} — an empty program is not evidence`,
     };
   const realRoot = realpathSync(root);
   const files = [];
@@ -159,6 +178,7 @@ export function diffTypecheck({ tracked, program, excluded }) {
  *   tsc?: string,
  *   excluded?: Record<string, string>,
  *   inventory?: (root: string) => string[],
+ *   projects?: readonly string[],
  * }} [deps]
  * @returns {{ failures: string[], checked: number }}
  */
@@ -167,6 +187,7 @@ export function run({
   tsc,
   excluded = EXCLUDED,
   inventory = trackedTypeScript,
+  projects = PROJECTS,
 } = {}) {
   let tracked;
   try {
@@ -188,10 +209,18 @@ export function run({
       checked: 0,
     };
   }
-  const listed = programFiles(root, entry);
-  if ("failure" in listed) return { failures: [listed.failure], checked: 0 };
+  // loam (NOR-388): the union of every project's program; any project that
+  // fails to list fails the run.
+  if (projects.length === 0)
+    return { failures: ["no TypeScript project to list"], checked: 0 };
+  const program = new Set();
+  for (const project of projects) {
+    const listed = programFiles(root, entry, project);
+    if ("failure" in listed) return { failures: [listed.failure], checked: 0 };
+    for (const f of listed.files) program.add(f);
+  }
   return {
-    failures: diffTypecheck({ tracked, program: listed.files, excluded }),
+    failures: diffTypecheck({ tracked, program: [...program], excluded }),
     checked: tracked.length,
   };
 }
@@ -207,7 +236,7 @@ if (
     );
     for (const f of failures) console.error(`  ${f}`);
     console.error(
-      "\nThe tsconfig `include` is the whole tree; a file outside the program is excluded there. Name it in EXCLUDED with its ticket, or remove the exclusion. See AGENTS.md.",
+      "\nEvery tracked TypeScript file must be in one of the projects in PROJECTS. Add it to a project's `include`, or name it in EXCLUDED with its ticket. See AGENTS.md.",
     );
     process.exit(1);
   }

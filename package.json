@@ -10,15 +10,40 @@
     "schema": "wrangler d1 execute loam --remote --file=schema.sql",
     "ingest:claude": "bun ingest/claude.ts",
     "ingest:files": "bun ingest/files.ts",
-    "typecheck": "tsc --noEmit -p . && tsc --noEmit -p ingest"
+    "format": "prettier --write \"**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}\"",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ingest && tsc --noEmit -p tsconfig.tools.json && node scripts/verify-typecheck-coverage.mjs",
+    "verify:action-pins": "node scripts/verify-action-pins.mjs",
+    "test:scripts": "node --test scripts/verify-action-pins.test.mjs && node --test scripts/verify-coverage-scope.test.mjs && node --test scripts/ts-inventory.test.mjs && node --test scripts/verify-typecheck-coverage.test.mjs && node --test scripts/dco-check.test.mjs && node --test scripts/lib/main-module.test.mjs",
+    "test": "vitest run",
+    "build": "mkdir -p .tmp-build && cp wrangler.jsonc.template .tmp-build/wrangler.jsonc && wrangler deploy src/index.ts --dry-run --outdir dist --config .tmp-build/wrangler.jsonc",
+    "validate": "npm run verify:action-pins && npm run test:scripts && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
+    "coverage": "node scripts/verify-coverage-scope.mjs --prepare && vitest run --coverage && node scripts/verify-coverage-scope.mjs",
+    "dco:check": "node scripts/dco-check.mjs",
+    "local:dco": "node scripts/dco-check.mjs --base origin/main",
+    "local:gate": "npm run validate && npm run local:dco && npm run coverage"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261031.1",
+    "@eslint/js": "^10.0.1",
     "@types/node": "22.10.2",
+    "@vitest/coverage-v8": "4.1.12",
+    "eslint": "^10.8.0",
+    "globals": "^17.7.0",
+    "prettier": "3.8.4",
     "typescript": "^5.9.3",
-    "wrangler": "^4.156.0"
+    "typescript-eslint": "^8.65.0",
+    "vitest": "4.1.12",
+    "wrangler": "^4.156.0",
+    "yaml": "^2.9.0"
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "overrides": {
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.8"
+    }
   }
 }

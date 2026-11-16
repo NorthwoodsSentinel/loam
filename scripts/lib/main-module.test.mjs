@@ -13,6 +13,11 @@
 // a248d0e4fa20b344c0b795f82eb8de053199a402). This paragraph is the only edit.
 // fleet-mcp has no Windows CI job either. Record: PROVENANCE-CHECK.md,
 // section 4.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 66adff993cd1609c4af368f60df4b38a73923922); record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// and their ticket numbers and file references are that repo's.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";

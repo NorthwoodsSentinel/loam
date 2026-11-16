@@ -1,13 +1,12 @@
-# Files `npm run format` and `npm run format:check` leave alone. NOR-355.
-# Copied from WALL-E's .prettierignore (NorthwoodsSentinel/walle origin/main
-# 5fb8747, blob dd0b2888) and edited for this repo. Prettier also skips
-# everything in .gitignore (node_modules, .wrangler, dist, coverage,
-# .test-report).
+# Files `npm run format` and `npm run format:check` leave alone.
+# Copied byte-for-byte from NorthwoodsSentinel/fleet-mcp origin/main f1bea96
+# (blob 5c8bf4c839ca30b13bef0bcb7272372a81ba5fe0), which copied WALL-E's, and
+# edited for loam (NOR-388): no vendored code and no Bun report here; the
+# dry-run build's scratch copy added. Prettier also skips everything in
+# .gitignore (node_modules, .wrangler, .tmp-build, dist).
 
-# Vendored byte-identical from pai-shuttle; test/vendor.test.ts fails on any
-# edit, so it is not reformatted here. Not NOR-364: its upstream is pai-shuttle.
-vendor/courier/
-
-# Coverage report written by `npm run coverage`, and the Bun JUnit report.
+# Coverage report written by `npm run coverage`.
 coverage/
-.test-report/
+
+# The wrangler template copy the dry-run build writes (`npm run build`).
+.tmp-build/

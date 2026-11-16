@@ -43,6 +43,11 @@
 // b87aa54ce26ce2877f5814369d378373074f1d18), WALL-E's symlink edit above
 // included. This paragraph is the only edit. Record: PROVENANCE-CHECK.md,
 // section 4.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob b35c2374c50999bf1f5a1a2fd19d990ff960b63f); record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// and their ticket numbers and file references are that repo's.
 
 import { realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";

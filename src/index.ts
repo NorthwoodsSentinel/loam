@@ -71,7 +71,7 @@ async function runFtsQuery(
   limit: number,
 ) {
   const where: string[] = ["messages_fts MATCH ?"];
-  const params: any[] = [ftsQuery];
+  const params: (string | number)[] = [ftsQuery];
   if (source) {
     where.push("source = ?");
     params.push(source);
@@ -124,7 +124,7 @@ async function handleSearch(url: URL, env: Env) {
   let usedFallback = false;
   try {
     result = await runFtsQuery(env, q, source, from, to, limit);
-  } catch (e: any) {
+  } catch (e) {
     if (FTS_SPECIALS.test(q)) {
       try {
         result = await runFtsQuery(
@@ -136,15 +136,18 @@ async function handleSearch(url: URL, env: Env) {
           limit,
         );
         usedFallback = true;
-      } catch (e2: any) {
+      } catch (e2) {
         return json(
-          { error: "fts query failed (raw + phrase)", detail: e2.message },
+          {
+            error: "fts query failed (raw + phrase)",
+            detail: (e2 as Error).message,
+          },
           { status: 400 },
         );
       }
     } else {
       return json(
-        { error: "fts query failed", detail: e.message },
+        { error: "fts query failed", detail: (e as Error).message },
         { status: 400 },
       );
     }
@@ -197,8 +200,8 @@ async function handleStats(env: Env) {
 async function handleSources(env: Env) {
   const r = await env.DB.prepare(
     "SELECT DISTINCT source FROM conversations ORDER BY source",
-  ).all();
-  return json({ sources: r.results?.map((x: any) => x.source) ?? [] });
+  ).all<{ source: string }>();
+  return json({ sources: r.results?.map((x) => x.source) ?? [] });
 }
 
 const UI = `<!doctype html>

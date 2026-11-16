@@ -1,0 +1,31 @@
+{
+  // Typecheck project for what is neither the Worker nor an ingest script:
+  // today, vitest.config.ts. loam, NOR-388.
+  //
+  // Written from WALL-E's tsconfig.tools.json (NorthwoodsSentinel/walle
+  // origin/main a7d94c2, blob 125be0b736eed576fd95cbf6fe3edae33daf8207), the
+  // org's example of a second project beside a Worker's: the Worker keeps
+  // tsconfig.json, whose `types` are Cloudflare's, and these files run on
+  // Node, so they need a project with different globals. Edited: Node's types
+  // instead of Bun's (loam's gate runs on Node and already depends on
+  // @types/node for ingest/), and `include` names loam's one such file.
+  //
+  // The lint config names this project beside tsconfig.json and
+  // ingest/tsconfig.json, and scripts/verify-typecheck-coverage.mjs lists all
+  // three (PROJECTS), so a tracked TypeScript file in none of them fails both.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["vitest.config.ts"]
+}

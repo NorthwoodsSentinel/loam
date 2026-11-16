@@ -41,7 +41,22 @@ if (!inputPath) {
   process.exit(1);
 }
 
-async function exec(sql: string, params: any[] = []): Promise<any> {
+// NOR-388, types only: these two declarations replace `any` (lint's
+// no-explicit-any). The values sent and the result returned are unchanged.
+/** A value bound to a `?` in a D1 query; `undefined` is sent as JSON null. */
+type D1Param = string | number | null | undefined;
+
+/** The part of a D1 REST API query response this script reads. */
+interface D1QueryResponse<T> {
+  success: boolean;
+  errors?: unknown;
+  result?: { results?: T[] }[];
+}
+
+async function exec<T = unknown>(
+  sql: string,
+  params: D1Param[] = [],
+): Promise<T[]> {
   const res = await fetch(API, {
     method: "POST",
     headers: {
@@ -50,7 +65,7 @@ async function exec(sql: string, params: any[] = []): Promise<any> {
     },
     body: JSON.stringify({ sql, params }),
   });
-  const j = (await res.json()) as any;
+  const j = (await res.json()) as D1QueryResponse<T>;
   if (!j.success) {
     throw new Error(
       `D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`,
@@ -63,13 +78,39 @@ const SOURCE = "claude";
 const ROW_LIMIT = 750_000; // SQLite per-row safety margin
 
 console.log(`reading ${inputPath}…`);
-const conversations: any[] = JSON.parse(readFileSync(inputPath, "utf8"));
+// NOR-388, types only: the export's shape as this script reads it, in place
+// of `any`. Every field is optional: the file is the user's export, not ours.
+interface ClaudeContentBlock {
+  type?: string;
+  text?: string;
+}
+interface ClaudeMessage {
+  uuid?: string;
+  text?: string;
+  content?: ClaudeContentBlock[];
+  sender?: string;
+  created_at?: string;
+}
+interface ClaudeConversation {
+  uuid?: string;
+  name?: string;
+  created_at?: string;
+  updated_at?: string;
+  chat_messages?: ClaudeMessage[];
+}
+
+const conversations: ClaudeConversation[] = JSON.parse(
+  readFileSync(inputPath, "utf8"),
+);
 console.log(`parsed ${conversations.length} conversations`);
 
-const existingIds = new Set<string>();
-const existing = await exec("SELECT id FROM conversations WHERE source = ?", [
-  SOURCE,
-]);
+// `string | undefined`: a conversation without a uuid is looked up as
+// undefined, which matches nothing (as before; NOR-388, types only).
+const existingIds = new Set<string | undefined>();
+const existing = await exec<{ id: string }>(
+  "SELECT id FROM conversations WHERE source = ?",
+  [SOURCE],
+);
 for (const r of existing) existingIds.add(r.id);
 console.log(`already in Loam: ${existingIds.size} conversations`);
 
@@ -81,7 +122,7 @@ let msgInserted = 0;
 let msgSkippedTooBig = 0;
 
 for (const conv of missing) {
-  const msgs = (conv.chat_messages ?? []) as any[];
+  const msgs = conv.chat_messages ?? [];
 
   await exec(
     "INSERT OR REPLACE INTO conversations (id, source, title, created_at, updated_at, message_count, raw_path) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -102,8 +143,8 @@ for (const conv of missing) {
     let content = m.text ?? "";
     if (!content && Array.isArray(m.content)) {
       content = m.content
-        .filter((b: any) => b?.type === "text" && b.text)
-        .map((b: any) => b.text)
+        .filter((b) => b?.type === "text" && b.text)
+        .map((b) => b.text)
         .join("\n");
     }
     if (!content) continue;

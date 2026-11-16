@@ -18,6 +18,11 @@
 // Build output dropped here, by path segment: the build writes dist/ and
 // .wrangler/ (AGENTS.md), coverage writes coverage/, the Bun report step writes
 // .test-report/, and node_modules is never tracked first-party source.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 03fbcc1eafcbd9954cea717a25b6034977b0b51e); record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// and their ticket numbers and file references are that repo's.
 
 import { spawnSync } from "node:child_process";
 

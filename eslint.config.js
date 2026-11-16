@@ -17,6 +17,14 @@
 // The `.mjs` files under scripts/ are not linted, as in WALL-E and the
 // Inspector (his lint scopes do not cover `scripts/`); they are
 // format-checked and tested under `node --test`.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 24be32c48853228cc0437f8d82fe728a6ef0d566), then
+// edited: three parser projects instead of one (loam's Worker, its ingest
+// scripts and its test configuration each have their own tsconfig, as WALL-E
+// names two), so a TypeScript file in none of them fails lint; and loam's
+// ignore list (no vendored code, no Bun report; `.tmp-build/`, where the
+// dry-run build copies the wrangler template). The rule set is unchanged.
 
 import js from "@eslint/js";
 import globals from "globals";
@@ -31,12 +39,9 @@ export default defineConfig([
     ".wrangler/**",
     "dist/**",
     "coverage/**",
-    ".test-report/**",
-    // The copied and new `.mjs` guards: not linted (see above).
+    ".tmp-build/**",
+    // The copied `.mjs` guards: not linted (see above).
     "scripts/**",
-    // Vendored byte-identical from pai-shuttle; test/vendor.test.ts fails on
-    // any edit. Not NOR-364: its upstream is pai-shuttle.
-    "vendor/courier/**",
   ]),
   {
     files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
@@ -48,7 +53,11 @@ export default defineConfig([
         ...globals.node,
       },
       parserOptions: {
-        project: ["./tsconfig.json"],
+        project: [
+          "./tsconfig.json",
+          "./ingest/tsconfig.json",
+          "./tsconfig.tools.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },

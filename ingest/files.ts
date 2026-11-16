@@ -52,7 +52,22 @@ if (!source || !root) {
   process.exit(1);
 }
 
-async function exec(sql: string, params: any[] = []): Promise<any> {
+// NOR-388, types only: these two declarations replace `any` (lint's
+// no-explicit-any). The values sent and the result returned are unchanged.
+/** A value bound to a `?` in a D1 query; `undefined` is sent as JSON null. */
+type D1Param = string | number | null | undefined;
+
+/** The part of a D1 REST API query response this script reads. */
+interface D1QueryResponse<T> {
+  success: boolean;
+  errors?: unknown;
+  result?: { results?: T[] }[];
+}
+
+async function exec<T = unknown>(
+  sql: string,
+  params: D1Param[] = [],
+): Promise<T[]> {
   const res = await fetch(API, {
     method: "POST",
     headers: {
@@ -61,7 +76,7 @@ async function exec(sql: string, params: any[] = []): Promise<any> {
     },
     body: JSON.stringify({ sql, params }),
   });
-  const j = (await res.json()) as any;
+  const j = (await res.json()) as D1QueryResponse<T>;
   if (!j.success) {
     throw new Error(
       `D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`,
@@ -146,8 +161,10 @@ for (const filepath of files) {
     );
     inserted++;
     if (inserted % 25 === 0) console.log(`  ${inserted} files ingested…`);
-  } catch (e: any) {
-    console.error(`  ERROR on ${filepath}: ${e.message?.slice(0, 120)}`);
+  } catch (e) {
+    console.error(
+      `  ERROR on ${filepath}: ${(e as Error).message?.slice(0, 120)}`,
+    );
     errored++;
   }
 }

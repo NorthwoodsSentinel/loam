@@ -53,6 +53,12 @@
 // written: `main` is this repo's develop branch too (AGENTS.md, branch table),
 // and `local:dco` uses `--base origin/main`. The design it names is WALL-E's,
 // kept verbatim in docs/; this repo's record: PROVENANCE-CHECK.md, section 4.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 5338fedd25763bc4b7cb454c1eb432d7deaf8a1d); record: PROVENANCE-CHECK.md.
+// In loam the same holds: `main` is the default branch every PR targets, and
+// `local:dco` uses `--base origin/main`. The design named above is WALL-E's
+// (NorthwoodsSentinel/walle docs/) and is not copied here.
 
 import { spawnSync } from "node:child_process";
 import { parseArgs } from "node:util";

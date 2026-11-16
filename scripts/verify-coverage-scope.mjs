@@ -36,6 +36,13 @@
 //   5. Vitest is closed exactly once when the config was resolved, even if
 //      reading the resolved options throws.
 //
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob d7942703ca4f96128fa78ef31f2383862b8ce400; record:
+// PROVENANCE-CHECK.md), then edited: `EXCLUDED` and `EXCLUDED_PATTERNS` name
+// this repo's files (the four ingest scripts, not yet under the bar, on lines
+// citing the follow-up ticket; the test files; the Vitest config), and the
+// report names this repository. The guard's logic is fleet-mcp's unchanged.
+//
 /**
  * Guards the file set each client's coverage run measures (#2709).
  *
@@ -108,9 +115,11 @@ const repoRoot = path.resolve(scriptsDir, "..");
 export const CONFIG = "vitest.config.ts";
 export const SUMMARY = "coverage/coverage-summary.json";
 
-// NOR-375 is the follow-up ticket to NOR-364 that brings these files under the bar.
+// loam: the follow-up to NOR-388 that brings these files under the bar. The
+// ticket is not filed yet; "NOR-388-FOLLOWUP-A" is replaced by its key when it
+// is (the PR body lists it).
 const FOLLOWUP =
-  "NOR-375: existing first-party code, not yet under the coverage bar (NOR-364 brought in the rest); brought in by NOR-375";
+  "NOR-388-FOLLOWUP-A: existing ingest script, a top-level CLI with no exported function to test; not yet under the coverage bar (NOR-388 brought in src/index.ts)";
 
 /**
  * Tracked TypeScript the coverage run deliberately does not measure: exact
@@ -120,11 +129,10 @@ const FOLLOWUP =
  * @type {Record<string, string>}
  */
 export const EXCLUDED = {
-  "src/source-lares.ts": FOLLOWUP,
-  "src/transport.ts": FOLLOWUP,
-  "tools/fixture-add-observer.ts": FOLLOWUP,
-  "tools/make-fixture.ts": FOLLOWUP,
-  "tools/observer-entry.ts": FOLLOWUP,
+  "ingest/chatgpt.ts": FOLLOWUP,
+  "ingest/claude.ts": FOLLOWUP,
+  "ingest/files.ts": FOLLOWUP,
+  "ingest/gemini.ts": FOLLOWUP,
   "vitest.config.ts": "configuration, not code under test (as walle has it)",
 };
 
@@ -136,10 +144,6 @@ export const EXCLUDED = {
  */
 export const EXCLUDED_PATTERNS = {
   "**/*.test.ts": "test files are not code under test (as walle has it)",
-  "test/**":
-    "the Bun test suite and its helpers are test code, not code under test",
-  "vendor/courier/**":
-    "vendored byte-identical from pai-shuttle; test/vendor.test.ts fails on any edit (design section 4)",
 };
 
 /**
@@ -499,7 +503,7 @@ export async function run({
   });
   const reported = summary.reported.map(canonical).filter((p) => p !== null);
   const failures = diffCoverageScope({
-    client: "fleet-mcp",
+    client: "loam",
     expected,
     reported,
     omissions,

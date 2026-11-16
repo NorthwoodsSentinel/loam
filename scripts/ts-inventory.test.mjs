@@ -2,6 +2,11 @@
 // the inventory requires, and that it reads Git's NUL-delimited output.
 // Codex's attack cases for it (11-14) are in tools/attack-inventory.test.ts.
 // Run via `npm run test:scripts`, which names this file by path.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 752a615b9ccd75a3746e96cb72d563c0319ae410); record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// and their ticket numbers and file references are that repo's.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";

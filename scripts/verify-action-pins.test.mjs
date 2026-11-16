@@ -22,6 +22,11 @@
 // driven with inline workflows; `main` against a throwaway tree on disk, so the
 // workflow discovery and the exit status are covered too.
 // Run via `npm run test:scripts`.
+//
+// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
+// origin/main f1bea96 (blob 82686195e6538f7f2f7fad30bf62a4701d2ed630); record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// and their ticket numbers and file references are that repo's.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
