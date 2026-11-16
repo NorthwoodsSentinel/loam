@@ -110,7 +110,8 @@ import {
   readFileSync,
 } from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { isMainModule } from "./lib/main-module.mjs";
 import { isAlias, isMap, isScalar, isSeq, parseDocument, visit } from "yaml";
 
 // Edit 5: his `SHA_REF`, copied from `dependency-refresh.mjs:111`.
@@ -367,5 +368,8 @@ export function main(root = repoRoot, hooks = {}) {
   return 0;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
-  process.exit(main());
+// loam (NOR-388, Codex audit of 8e2e46c, HIGH): the entry check is the shared
+// isMainModule (scripts/lib/main-module.mjs), as dco-check.mjs uses it. The
+// copied inline comparison was false when the checkout is reached through a
+// symlink, so the guard ran nothing and exited 0.
+if (isMainModule(import.meta.url)) process.exit(main());

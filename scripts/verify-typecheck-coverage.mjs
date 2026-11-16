@@ -38,7 +38,8 @@ import { spawnSync } from "node:child_process";
 import { realpathSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import { isMainModule } from "./lib/main-module.mjs";
 import { trackedTypeScript } from "./lib/ts-inventory.mjs";
 
 const repoRoot = path.resolve(
@@ -225,10 +226,11 @@ export function run({
   };
 }
 
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+// loam (NOR-388, Codex audit of 8e2e46c, HIGH): the entry check is the shared
+// isMainModule (scripts/lib/main-module.mjs), as dco-check.mjs uses it. The
+// copied inline comparison was false when the checkout is reached through a
+// symlink, so the guard ran nothing and exited 0.
+if (isMainModule(import.meta.url)) {
   const { failures, checked } = run();
   if (failures.length > 0) {
     console.error(

@@ -15,7 +15,7 @@
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p ingest && tsc --noEmit -p tsconfig.tools.json && node scripts/verify-typecheck-coverage.mjs",
     "verify:action-pins": "node scripts/verify-action-pins.mjs",
-    "test:scripts": "node --test scripts/verify-action-pins.test.mjs && node --test scripts/verify-coverage-scope.test.mjs && node --test scripts/ts-inventory.test.mjs && node --test scripts/verify-typecheck-coverage.test.mjs && node --test scripts/dco-check.test.mjs && node --test scripts/lib/main-module.test.mjs",
+    "test:scripts": "node --test scripts/verify-action-pins.test.mjs && node --test scripts/verify-coverage-scope.test.mjs && node --test scripts/ts-inventory.test.mjs && node --test scripts/verify-typecheck-coverage.test.mjs && node --test scripts/dco-check.test.mjs && node --test scripts/lib/main-module.test.mjs && node --test scripts/entry-points.test.mjs",
     "test": "vitest run",
     "build": "mkdir -p .tmp-build && cp wrangler.jsonc.template .tmp-build/wrangler.jsonc && wrangler deploy src/index.ts --dry-run --outdir dist --config .tmp-build/wrangler.jsonc",
     "validate": "npm run verify:action-pins && npm run test:scripts && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",

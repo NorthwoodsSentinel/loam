@@ -23,11 +23,11 @@ Source repo: `NorthwoodsSentinel/fleet-mcp` (private), `origin/main` = `f1bea96`
 | `scripts/lib/main-module.test.mjs` | 86 | `66adff993cd1609c4af368f60df4b38a73923922` | A provenance paragraph only |
 | `scripts/lib/ts-inventory.mjs` | 76 | `03fbcc1eafcbd9954cea717a25b6034977b0b51e` | A provenance paragraph only |
 | `scripts/ts-inventory.test.mjs` | 51 | `752a615b9ccd75a3746e96cb72d563c0319ae410` | A provenance paragraph only |
-| `scripts/verify-action-pins.mjs` | 364 | `011a04c44ce9769bd15f8bfa82cb27d89162e957` | A provenance paragraph; the failure message cites AGENTS.md instead of fleet-mcp's ticket |
+| `scripts/verify-action-pins.mjs` | 364 | `011a04c44ce9769bd15f8bfa82cb27d89162e957` | A provenance paragraph; the failure message cites AGENTS.md instead of fleet-mcp's ticket; the entry check uses `isMainModule` (Codex audit, HIGH; section 6) |
 | `scripts/verify-action-pins.test.mjs` | 452 | `82686195e6538f7f2f7fad30bf62a4701d2ed630` | A provenance paragraph only |
-| `scripts/verify-coverage-scope.mjs` | 553 | `d7942703ca4f96128fa78ef31f2383862b8ce400` | `EXCLUDED` and `EXCLUDED_PATTERNS` name loam's files; the report names `loam`; a provenance paragraph. Logic unchanged |
+| `scripts/verify-coverage-scope.mjs` | 553 | `d7942703ca4f96128fa78ef31f2383862b8ce400` | `EXCLUDED` and `EXCLUDED_PATTERNS` name loam's files; the report names `loam`; the entry check uses `isMainModule` (section 6); a provenance paragraph. Comparison logic unchanged |
 | `scripts/verify-coverage-scope.test.mjs` | 331 | `34d5bb9a0dd2accf33ffbd51557b7f9a009ecb0e` | One assertion expects `loam:`; a provenance paragraph |
-| `scripts/verify-typecheck-coverage.mjs` | 217 | `fd9163fdd668cf2ead9aeb10040a0227ed43d20a` | Three projects instead of one (`PROJECTS`; `programFiles` takes the project; `run` takes the union and fails if any project fails or the list is empty); a provenance paragraph |
+| `scripts/verify-typecheck-coverage.mjs` | 217 | `fd9163fdd668cf2ead9aeb10040a0227ed43d20a` | Three projects instead of one (`PROJECTS`; `programFiles` takes the project; `run` takes the union and fails if any project fails or the list is empty); the entry check uses `isMainModule` (section 6); a provenance paragraph |
 | `scripts/verify-typecheck-coverage.test.mjs` | 67 | `719fcbcbf856e2fb06c743ea062c4ddd9e928f24` | The last case expects loam's marker; five cases added for the projects edit, against a fake compiler |
 | `.github/workflows/main.yml` | 113 | `7932a098e637e270effd73a6bb05c2ce8b7a9108` | Header rewritten for loam; Node only (Bun setup and its pin removed: loam's gate runs no Bun); `npm ci` from `package-lock.json`; run line `validate && coverage` (no `smoke`: loam is not an MCP server) |
 | `.github/workflows/dco.yml` | 190 | `9d3165be6059d7798e32719ccb1510ba5db2294c` | A loam paragraph; the PR job's base checkout back to the source's `persist-credentials: false` (loam is public; fleet-mcp's `true` was for a private repo's fetch). Triggers, jobs and pins unchanged |
@@ -59,3 +59,7 @@ Both workflows use `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 
 ## 5. The sign-off check and this repo's unsigned history
 
 loam's commits before NOR-388 carry no sign-off. The `DCO (main push)` job checks `github.event.before..github.event.after`, so a push to `main` checks only the commits that push added; everything already on `main` is reachable from `before` and excluded. The PR job checks `origin/main..<head>`, which is only this PR's commits, each signed off (checked with `npm run local:dco`).
+
+## 6. Fixed after Codex's audit of `8e2e46c`
+
+Codex (read-only, through the `codex-review` wrapper) found one HIGH: `verify-action-pins.mjs`, `verify-typecheck-coverage.mjs` and `verify-coverage-scope.mjs`, as copied from fleet-mcp, decided whether to run by comparing `import.meta.url` with `process.argv[1]` inline. Started through a symlinked checkout, Node resolves the module's real path while `argv[1]` keeps the link, so each guard ran nothing and exited 0. Reproduced here before fixing (all three: exit 0, no output). Each now uses `isMainModule` from `scripts/lib/main-module.mjs`, the helper `dco-check.mjs` already used, which WALL-E hardened for this case. `scripts/entry-points.test.mjs` (in `test:scripts`) starts all four guards through a symlink and fails if one stays silent; it failed on the three unfixed guards and passes now. The same inline check is in fleet-mcp's copies; that is fleet-mcp's to fix.
