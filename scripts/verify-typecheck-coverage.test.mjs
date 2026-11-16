@@ -1,0 +1,67 @@
+// Unit tests for scripts/verify-typecheck-coverage.mjs (NOR-355): the
+// comparison of the inventory with the program and the EXCLUDED rules, and
+// that the shipped EXCLUDED entries carry reasons. Codex's attack cases for
+// the guard (14-20) are in tools/attack-inventory.test.ts, against a real
+// compiler and fake ones. Run via `npm run test:scripts`.
+
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { EXCLUDED, diffTypecheck, run } from "./verify-typecheck-coverage.mjs";
+
+test("a tracked file in no program and not excluded fails by name", () => {
+  const failures = diffTypecheck({
+    tracked: ["a.ts", "b.ts"],
+    program: ["a.ts"],
+    excluded: {},
+  });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /b\.ts — in no tsconfig project/);
+});
+
+test("an excluded file passes; reasonless, pattern, untracked and stale entries fail", () => {
+  assert.deepEqual(
+    diffTypecheck({
+      tracked: ["a.ts", "b.ts"],
+      program: ["a.ts"],
+      excluded: { "b.ts": "NOR-364" },
+    }),
+    [],
+  );
+  const failures = diffTypecheck({
+    tracked: ["a.ts", "b.ts"],
+    program: ["a.ts", "b.ts"],
+    excluded: {
+      "c.ts": "NOR-364",
+      "b.ts": "NOR-364",
+      "x/**": "NOR-364",
+      "a.ts": " ",
+    },
+  });
+  assert.equal(failures.length, 4);
+});
+
+test("an empty inventory fails", () => {
+  assert.match(
+    diffTypecheck({ tracked: [], program: ["a.ts"], excluded: {} })[0],
+    /inventory is empty/,
+  );
+  assert.match(run({ inventory: () => [] }).failures[0], /inventory is empty/);
+});
+
+test("an inventory that throws, or a missing compiler, fails", () => {
+  const thrown = run({
+    inventory: () => {
+      throw new Error("git broke");
+    },
+  });
+  assert.deepEqual(thrown.failures, ["git broke"]);
+  const noTsc = run({ root: "/", inventory: () => ["a.ts"] });
+  assert.match(noTsc.failures[0], /cannot find the TypeScript compiler/);
+});
+
+test("the shipped EXCLUDED entries are exact paths with NOR-364 reasons", () => {
+  for (const [entry, reason] of Object.entries(EXCLUDED)) {
+    assert.doesNotMatch(entry, /[*?[\]{}!]/);
+    assert.match(reason, /NOR-364/);
+  }
+});

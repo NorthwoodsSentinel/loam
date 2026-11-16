@@ -1,0 +1,13 @@
+# Files `npm run format` and `npm run format:check` leave alone. NOR-355.
+# Copied from WALL-E's .prettierignore (NorthwoodsSentinel/walle origin/main
+# 5fb8747, blob dd0b2888) and edited for this repo. Prettier also skips
+# everything in .gitignore (node_modules, .wrangler, dist, coverage,
+# .test-report).
+
+# Vendored byte-identical from pai-shuttle; test/vendor.test.ts fails on any
+# edit, so it is not reformatted here. Not NOR-364: its upstream is pai-shuttle.
+vendor/courier/
+
+# Coverage report written by `npm run coverage`, and the Bun JUnit report.
+coverage/
+.test-report/
