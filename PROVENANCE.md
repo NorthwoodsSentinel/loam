@@ -82,6 +82,6 @@
 | 5 (half) | The MCP authority boundary (`authority: "NONE"`, allowlists, the frozen fixture) | not applicable | About fleet-mcp's own server. |
 | 15-17 | Skills table and its `client-smoke` row | not applicable | No skill here; `client-smoke` drives an MCP server. |
 | 54 (half) | The agent merges its own PR | not applicable | The owner merges in public repos (NOR-381). |
-| 214 | Removing files from pai-shuttle | not applicable | Names a private repo loam has no relation to. |
+| 214 | Removing files from a named private repository | not applicable | Names a private repository loam has no relation to; not repeated here. |
 
 Every other fleet-mcp line is in Table 1.
