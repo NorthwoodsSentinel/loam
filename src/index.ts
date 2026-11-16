@@ -68,13 +68,22 @@ async function runFtsQuery(
   source: string,
   from: string,
   to: string,
-  limit: number
+  limit: number,
 ) {
   const where: string[] = ["messages_fts MATCH ?"];
-  const params: any[] = [ftsQuery];
-  if (source) { where.push("source = ?"); params.push(source); }
-  if (from) { where.push("created_at >= ?"); params.push(from); }
-  if (to) { where.push("created_at <= ?"); params.push(to); }
+  const params: (string | number)[] = [ftsQuery];
+  if (source) {
+    where.push("source = ?");
+    params.push(source);
+  }
+  if (from) {
+    where.push("created_at >= ?");
+    params.push(from);
+  }
+  if (to) {
+    where.push("created_at <= ?");
+    params.push(to);
+  }
 
   const sql = `
     SELECT
@@ -94,7 +103,9 @@ async function runFtsQuery(
   `;
   params.push(limit);
 
-  return env.DB.prepare(sql).bind(...params).all();
+  return env.DB.prepare(sql)
+    .bind(...params)
+    .all();
 }
 
 async function handleSearch(url: URL, env: Env) {
@@ -104,41 +115,66 @@ async function handleSearch(url: URL, env: Env) {
   const source = url.searchParams.get("source") || "";
   const from = url.searchParams.get("from") || "";
   const to = url.searchParams.get("to") || "";
-  const limit = Math.min(parseInt(url.searchParams.get("limit") || "25", 10), 100);
+  const limit = Math.min(
+    parseInt(url.searchParams.get("limit") || "25", 10),
+    100,
+  );
 
   let result;
   let usedFallback = false;
   try {
     result = await runFtsQuery(env, q, source, from, to, limit);
-  } catch (e: any) {
+  } catch (e) {
     if (FTS_SPECIALS.test(q)) {
       try {
-        result = await runFtsQuery(env, sanitizeFtsPhrase(q), source, from, to, limit);
+        result = await runFtsQuery(
+          env,
+          sanitizeFtsPhrase(q),
+          source,
+          from,
+          to,
+          limit,
+        );
         usedFallback = true;
-      } catch (e2: any) {
-        return json({ error: "fts query failed (raw + phrase)", detail: e2.message }, { status: 400 });
+      } catch (e2) {
+        return json(
+          {
+            error: "fts query failed (raw + phrase)",
+            detail: (e2 as Error).message,
+          },
+          { status: 400 },
+        );
       }
     } else {
-      return json({ error: "fts query failed", detail: e.message }, { status: 400 });
+      return json(
+        { error: "fts query failed", detail: (e as Error).message },
+        { status: 400 },
+      );
     }
   }
 
   return json({
     query: q,
     fallback_phrase_mode: usedFallback,
-    filters: { source: source || null, from: from || null, to: to || null, limit },
+    filters: {
+      source: source || null,
+      from: from || null,
+      to: to || null,
+      limit,
+    },
     count: result.results?.length ?? 0,
     results: result.results,
   });
 }
 
 async function handleConversation(id: string, env: Env) {
-  const conv = await env.DB.prepare("SELECT * FROM conversations WHERE id = ?").bind(id).first();
+  const conv = await env.DB.prepare("SELECT * FROM conversations WHERE id = ?")
+    .bind(id)
+    .first();
   if (!conv) return json({ error: "conversation not found" }, { status: 404 });
-  const msgs = await env.DB
-    .prepare(
-      "SELECT id, role, content, created_at, position FROM messages WHERE conversation_id = ? ORDER BY position"
-    )
+  const msgs = await env.DB.prepare(
+    "SELECT id, role, content, created_at, position FROM messages WHERE conversation_id = ? ORDER BY position",
+  )
     .bind(id)
     .all();
   return json({ conversation: conv, messages: msgs.results });
@@ -146,20 +182,26 @@ async function handleConversation(id: string, env: Env) {
 
 async function handleStats(env: Env) {
   const totals = await env.DB.prepare(
-    "SELECT (SELECT COUNT(*) FROM conversations) AS conversations, (SELECT COUNT(*) FROM messages) AS messages, (SELECT COUNT(DISTINCT source) FROM conversations) AS sources_count"
+    "SELECT (SELECT COUNT(*) FROM conversations) AS conversations, (SELECT COUNT(*) FROM messages) AS messages, (SELECT COUNT(DISTINCT source) FROM conversations) AS sources_count",
   ).first();
   const bySource = await env.DB.prepare(
-    "SELECT source, COUNT(*) AS conversations, SUM(message_count) AS messages, MIN(created_at) AS first, MAX(created_at) AS last FROM conversations GROUP BY source"
+    "SELECT source, COUNT(*) AS conversations, SUM(message_count) AS messages, MIN(created_at) AS first, MAX(created_at) AS last FROM conversations GROUP BY source",
   ).all();
   const byMonth = await env.DB.prepare(
-    "SELECT substr(created_at, 1, 7) AS month, COUNT(*) AS conversations FROM conversations GROUP BY month ORDER BY month DESC LIMIT 24"
+    "SELECT substr(created_at, 1, 7) AS month, COUNT(*) AS conversations FROM conversations GROUP BY month ORDER BY month DESC LIMIT 24",
   ).all();
-  return json({ totals, by_source: bySource.results, by_month: byMonth.results });
+  return json({
+    totals,
+    by_source: bySource.results,
+    by_month: byMonth.results,
+  });
 }
 
 async function handleSources(env: Env) {
-  const r = await env.DB.prepare("SELECT DISTINCT source FROM conversations ORDER BY source").all();
-  return json({ sources: r.results?.map((x: any) => x.source) ?? [] });
+  const r = await env.DB.prepare(
+    "SELECT DISTINCT source FROM conversations ORDER BY source",
+  ).all<{ source: string }>();
+  return json({ sources: r.results?.map((x) => x.source) ?? [] });
 }
 
 const UI = `<!doctype html>

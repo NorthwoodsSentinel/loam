@@ -17,3 +17,6 @@ dist/
 exports/
 *.zip
 test-results-*.json
+
+# Coverage report written by `npm run coverage` (NOR-388).
+coverage/

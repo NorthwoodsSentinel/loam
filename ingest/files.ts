@@ -29,7 +29,9 @@ const ACCOUNT_ID = process.env.LOAM_ACCOUNT_ID;
 const DB_ID = process.env.LOAM_DB_ID;
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN;
 if (!ACCOUNT_ID || !DB_ID || !TOKEN) {
-  console.error("required env: LOAM_ACCOUNT_ID, LOAM_DB_ID, CLOUDFLARE_API_TOKEN");
+  console.error(
+    "required env: LOAM_ACCOUNT_ID, LOAM_DB_ID, CLOUDFLARE_API_TOKEN",
+  );
   process.exit(1);
 }
 const API = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DB_ID}/query`;
@@ -37,24 +39,48 @@ const API = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/data
 const args = process.argv.slice(2);
 const source = args[0];
 const root = args[1];
-const exclude = (args.find((a) => a.startsWith("--exclude="))?.split("=")[1] ?? "")
+const exclude = (
+  args.find((a) => a.startsWith("--exclude="))?.split("=")[1] ?? ""
+)
   .split(",")
   .filter(Boolean);
 
 if (!source || !root) {
-  console.error("usage: bun ingest/files.ts <source-tag> <root-dir> [--exclude=name1,name2]");
+  console.error(
+    "usage: bun ingest/files.ts <source-tag> <root-dir> [--exclude=name1,name2]",
+  );
   process.exit(1);
 }
 
-async function exec(sql: string, params: any[] = []): Promise<any> {
+// NOR-388, types only: these two declarations replace `any` (lint's
+// no-explicit-any). The values sent and the result returned are unchanged.
+/** A value bound to a `?` in a D1 query; `undefined` is sent as JSON null. */
+type D1Param = string | number | null | undefined;
+
+/** The part of a D1 REST API query response this script reads. */
+interface D1QueryResponse<T> {
+  success: boolean;
+  errors?: unknown;
+  result?: { results?: T[] }[];
+}
+
+async function exec<T = unknown>(
+  sql: string,
+  params: D1Param[] = [],
+): Promise<T[]> {
   const res = await fetch(API, {
     method: "POST",
-    headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ sql, params }),
   });
-  const j = (await res.json()) as any;
+  const j = (await res.json()) as D1QueryResponse<T>;
   if (!j.success) {
-    throw new Error(`D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`);
+    throw new Error(
+      `D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`,
+    );
   }
   return j.result?.[0]?.results ?? [];
 }
@@ -74,7 +100,9 @@ function walk(dir: string): string[] {
 function extractFrontmatterTitle(content: string): string | null {
   const fm = content.match(/^---\n([\s\S]*?)\n---/);
   if (!fm) return null;
-  const nameLine = fm[1].split("\n").find((l) => l.startsWith("name:") || l.startsWith("title:"));
+  const nameLine = fm[1]
+    .split("\n")
+    .find((l) => l.startsWith("name:") || l.startsWith("title:"));
   if (!nameLine) return null;
   return nameLine.replace(/^(name|title):\s*/, "").trim();
 }
@@ -82,11 +110,13 @@ function extractFrontmatterTitle(content: string): string | null {
 const ROW_LIMIT = 750_000;
 
 const files = walk(root).filter(
-  (f) => !exclude.some((ex) => basename(f) === ex || f.includes(ex))
+  (f) => !exclude.some((ex) => basename(f) === ex || f.includes(ex)),
 );
 
 console.log(`scanning ${root}…`);
-console.log(`found ${files.length} files (after exclusions: ${exclude.join(", ") || "none"})`);
+console.log(
+  `found ${files.length} files (after exclusions: ${exclude.join(", ") || "none"})`,
+);
 
 let inserted = 0;
 let skipped = 0;
@@ -108,37 +138,49 @@ for (const filepath of files) {
 
     const id = createHash("sha1").update(filepath).digest("hex").slice(0, 36);
     const formattedId = `${id.slice(0, 8)}-${id.slice(8, 12)}-${id.slice(12, 16)}-${id.slice(16, 20)}-${id.slice(20, 32)}`;
-    const title = extractFrontmatterTitle(content) ?? basename(filepath, ".md").replace(/\.txt$/, "");
+    const title =
+      extractFrontmatterTitle(content) ??
+      basename(filepath, ".md").replace(/\.txt$/, "");
     const mtime = new Date(stat.mtimeMs).toISOString();
     const relPath = relative(process.env.HOME ?? process.cwd(), filepath);
 
     await exec(
       "INSERT OR REPLACE INTO conversations (id, source, title, created_at, updated_at, message_count, raw_path) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [formattedId, source, title, mtime, mtime, 1, relPath]
+      [formattedId, source, title, mtime, mtime, 1, relPath],
     );
 
     const msgId = `msg-${formattedId}`;
     await exec(
       "INSERT OR REPLACE INTO messages (id, conversation_id, role, content, created_at, position) VALUES (?, ?, ?, ?, ?, ?)",
-      [msgId, formattedId, "document", content, mtime, 0]
+      [msgId, formattedId, "document", content, mtime, 0],
     );
     await exec("DELETE FROM messages_fts WHERE message_id = ?", [msgId]);
     await exec(
       "INSERT INTO messages_fts (content, conversation_id, message_id, source, role, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-      [content, formattedId, msgId, source, "document", mtime]
+      [content, formattedId, msgId, source, "document", mtime],
     );
     inserted++;
     if (inserted % 25 === 0) console.log(`  ${inserted} files ingested…`);
-  } catch (e: any) {
-    console.error(`  ERROR on ${filepath}: ${e.message?.slice(0, 120)}`);
+  } catch (e) {
+    console.error(
+      `  ERROR on ${filepath}: ${(e as Error).message?.slice(0, 120)}`,
+    );
     errored++;
   }
 }
 
-console.log(`\ndone — inserted: ${inserted}, skipped: ${skipped}, errors: ${errored}`);
+console.log(
+  `\ndone — inserted: ${inserted}, skipped: ${skipped}, errors: ${errored}`,
+);
 
 await exec(
   "INSERT INTO ingestions (source, archive_path, conversations, messages, notes) VALUES (?, ?, ?, ?, ?)",
-  [source, root, inserted, inserted, `File ingest from ${root}. Skipped: ${skipped}, errors: ${errored}.`]
+  [
+    source,
+    root,
+    inserted,
+    inserted,
+    `File ingest from ${root}. Skipped: ${skipped}, errors: ${errored}.`,
+  ],
 );
 console.log("ledger row inserted");

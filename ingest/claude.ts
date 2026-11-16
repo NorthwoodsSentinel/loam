@@ -26,26 +26,50 @@ const ACCOUNT_ID = process.env.LOAM_ACCOUNT_ID;
 const DB_ID = process.env.LOAM_DB_ID;
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN;
 if (!ACCOUNT_ID || !DB_ID || !TOKEN) {
-  console.error("required env: LOAM_ACCOUNT_ID, LOAM_DB_ID, CLOUDFLARE_API_TOKEN");
+  console.error(
+    "required env: LOAM_ACCOUNT_ID, LOAM_DB_ID, CLOUDFLARE_API_TOKEN",
+  );
   process.exit(1);
 }
 const API = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/d1/database/${DB_ID}/query`;
 
 const [, , inputPath, rawPath = "claude-export.zip"] = process.argv;
 if (!inputPath) {
-  console.error("usage: bun ingest/claude.ts <conversations.json> [raw_path-tag]");
+  console.error(
+    "usage: bun ingest/claude.ts <conversations.json> [raw_path-tag]",
+  );
   process.exit(1);
 }
 
-async function exec(sql: string, params: any[] = []): Promise<any> {
+// NOR-388, types only: these two declarations replace `any` (lint's
+// no-explicit-any). The values sent and the result returned are unchanged.
+/** A value bound to a `?` in a D1 query; `undefined` is sent as JSON null. */
+type D1Param = string | number | null | undefined;
+
+/** The part of a D1 REST API query response this script reads. */
+interface D1QueryResponse<T> {
+  success: boolean;
+  errors?: unknown;
+  result?: { results?: T[] }[];
+}
+
+async function exec<T = unknown>(
+  sql: string,
+  params: D1Param[] = [],
+): Promise<T[]> {
   const res = await fetch(API, {
     method: "POST",
-    headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ sql, params }),
   });
-  const j = (await res.json()) as any;
+  const j = (await res.json()) as D1QueryResponse<T>;
   if (!j.success) {
-    throw new Error(`D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`);
+    throw new Error(
+      `D1 error: ${JSON.stringify(j.errors)} | sql=${sql.slice(0, 100)}…`,
+    );
   }
   return j.result?.[0]?.results ?? [];
 }
@@ -54,11 +78,39 @@ const SOURCE = "claude";
 const ROW_LIMIT = 750_000; // SQLite per-row safety margin
 
 console.log(`reading ${inputPath}…`);
-const conversations: any[] = JSON.parse(readFileSync(inputPath, "utf8"));
+// NOR-388, types only: the export's shape as this script reads it, in place
+// of `any`. Every field is optional: the file is the user's export, not ours.
+interface ClaudeContentBlock {
+  type?: string;
+  text?: string;
+}
+interface ClaudeMessage {
+  uuid?: string;
+  text?: string;
+  content?: ClaudeContentBlock[];
+  sender?: string;
+  created_at?: string;
+}
+interface ClaudeConversation {
+  uuid?: string;
+  name?: string;
+  created_at?: string;
+  updated_at?: string;
+  chat_messages?: ClaudeMessage[];
+}
+
+const conversations: ClaudeConversation[] = JSON.parse(
+  readFileSync(inputPath, "utf8"),
+);
 console.log(`parsed ${conversations.length} conversations`);
 
-const existingIds = new Set<string>();
-const existing = await exec("SELECT id FROM conversations WHERE source = ?", [SOURCE]);
+// `string | undefined`: a conversation without a uuid is looked up as
+// undefined, which matches nothing (as before; NOR-388, types only).
+const existingIds = new Set<string | undefined>();
+const existing = await exec<{ id: string }>(
+  "SELECT id FROM conversations WHERE source = ?",
+  [SOURCE],
+);
 for (const r of existing) existingIds.add(r.id);
 console.log(`already in Loam: ${existingIds.size} conversations`);
 
@@ -70,11 +122,19 @@ let msgInserted = 0;
 let msgSkippedTooBig = 0;
 
 for (const conv of missing) {
-  const msgs = (conv.chat_messages ?? []) as any[];
+  const msgs = conv.chat_messages ?? [];
 
   await exec(
     "INSERT OR REPLACE INTO conversations (id, source, title, created_at, updated_at, message_count, raw_path) VALUES (?, ?, ?, ?, ?, ?, ?)",
-    [conv.uuid, SOURCE, conv.name ?? "", conv.created_at, conv.updated_at ?? conv.created_at, msgs.length, rawPath]
+    [
+      conv.uuid,
+      SOURCE,
+      conv.name ?? "",
+      conv.created_at,
+      conv.updated_at ?? conv.created_at,
+      msgs.length,
+      rawPath,
+    ],
   );
   convInserted++;
 
@@ -83,36 +143,48 @@ for (const conv of missing) {
     let content = m.text ?? "";
     if (!content && Array.isArray(m.content)) {
       content = m.content
-        .filter((b: any) => b?.type === "text" && b.text)
-        .map((b: any) => b.text)
+        .filter((b) => b?.type === "text" && b.text)
+        .map((b) => b.text)
         .join("\n");
     }
     if (!content) continue;
     if (content.length > ROW_LIMIT) {
-      console.warn(`  skip oversized msg ${m.uuid} (${content.length} chars) in conv ${conv.uuid}`);
+      console.warn(
+        `  skip oversized msg ${m.uuid} (${content.length} chars) in conv ${conv.uuid}`,
+      );
       msgSkippedTooBig++;
       continue;
     }
     const role = m.sender;
     await exec(
       "INSERT OR REPLACE INTO messages (id, conversation_id, role, content, created_at, position) VALUES (?, ?, ?, ?, ?, ?)",
-      [m.uuid, conv.uuid, role, content, m.created_at, pos]
+      [m.uuid, conv.uuid, role, content, m.created_at, pos],
     );
     await exec(
       "INSERT INTO messages_fts (content, conversation_id, message_id, source, role, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-      [content, conv.uuid, m.uuid, SOURCE, role, m.created_at]
+      [content, conv.uuid, m.uuid, SOURCE, role, m.created_at],
     );
     msgInserted++;
   }
   if (convInserted % 5 === 0) {
-    console.log(`  ${convInserted}/${missing.length} convs done, ${msgInserted} msgs ingested`);
+    console.log(
+      `  ${convInserted}/${missing.length} convs done, ${msgInserted} msgs ingested`,
+    );
   }
 }
 
-console.log(`\ndone: ${convInserted} conversations, ${msgInserted} messages, ${msgSkippedTooBig} skipped oversized`);
+console.log(
+  `\ndone: ${convInserted} conversations, ${msgInserted} messages, ${msgSkippedTooBig} skipped oversized`,
+);
 
 await exec(
   "INSERT INTO ingestions (source, archive_path, conversations, messages, notes) VALUES (?, ?, ?, ?, ?)",
-  [SOURCE, rawPath, convInserted, msgInserted, `Claude export ingest. Skipped: ${msgSkippedTooBig}.`]
+  [
+    SOURCE,
+    rawPath,
+    convInserted,
+    msgInserted,
+    `Claude export ingest. Skipped: ${msgSkippedTooBig}.`,
+  ],
 );
 console.log("ledger row inserted");
