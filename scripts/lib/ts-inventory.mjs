@@ -1,6 +1,6 @@
 // The tracked-TypeScript inventory that verify-typecheck-coverage.mjs and
-// verify-coverage-scope.mjs compare their sets against. NOR-355; design:
-// docs/DESIGN-nor-355-check.md, "Every tracked TypeScript file is typechecked
+// verify-coverage-scope.mjs compare their sets against. Design: the check's design
+// note in private source B, "Every tracked TypeScript file is typechecked
 // and coverage-measured, or named" (Codex design review r1, finding 1).
 //
 // Behaviour copied from the MCP Inspector's scripts/verify-typecheck-coverage.mjs
@@ -19,6 +19,7 @@
 // .wrangler/ (AGENTS.md), coverage writes coverage/, the Bun report step writes
 // .test-report/, and node_modules is never tracked first-party source.
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B; record: PROVENANCE-CHECK.md.
 // This paragraph is the only edit; the comments above it are private source B's,
 // and their ticket numbers and file references are that repo's.

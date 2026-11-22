@@ -11,7 +11,7 @@
 #
 #   - `DCO` — on every PR, over the PR's commits. It is made a REQUIRED
 #     status check on `main` by a repository ruleset on `main` (not yet in
-#     this repo: NOR-356; setting it is the owner's act), not by this
+#     this repo; setting it is the owner's act), not by this
 #     file — no workflow can make itself required. That ruleset is to pin the
 #     check to GitHub Actions (integration 15368), so a commit status posted by
 #     hand under the name `DCO` cannot satisfy it. ⚠️ Renaming
@@ -77,11 +77,12 @@
 # 360fe4f17c2233f041549e60128becd57f5c95b1), by copy then edit. His reasoning
 # on `pull_request` versus `pull_request_target` above is kept as written; the
 # issue numbers in it are his repo's. Every edit is listed in
-# docs/DESIGN-nor-349-signoff.md, section 3; record: PROVENANCE-CHECK.md.
+# the sign-off design note in private source A, section 3; record: PROVENANCE-CHECK.md.
 #
-# In private source B (NOR-357): copied from private source A,
+# kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+# In private source B: copied from private source A,
 # .github/workflows/dco.yml. The design named above is private source A's, kept verbatim in docs/. Edits, comments only: the ruleset
-# paragraph (this repo has none yet, NOR-356), who merges (this repo's
+# paragraph (this repo has none yet), who merges (this repo's
 # Contributing rule), where `main`'s role is recorded, the push step's
 # ruleset remark, and this paragraph.
 # Triggers, jobs, steps and pins are private source A's unchanged. The push job's range
@@ -185,7 +186,7 @@ jobs:
         # check. A `before` missing from the history (a force-push that
         # rewrote it away) makes `git log` fail and the script exit 2 — loud
         # on purpose, since `main` is never meant to be rewritten (no ruleset
-        # blocks a force-push on it in this repo yet: NOR-356).
+        # blocks a force-push on it in this repo yet).
         env:
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.event.after }}

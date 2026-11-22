@@ -4,15 +4,16 @@
 // format and its parser only mean anything together. Run via
 // `npm run test:scripts`.
 //
-// In this repo (private source A, NOR-349): copied unchanged from
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+// In this repo (private source A): copied unchanged from
 // modelcontextprotocol/inspector at commit
 // d330df9617e44ec893bc1a53618662239342d433, scripts/dco-check.test.mjs (blob
 // 510b5e885187541a99ccf99910c88a1465c76f85). This block is the only edit.
 // The `origin/v2/main` strings below are argument values only. Codex's attack
-// cases for this check are in tools/dco.attack.test.ts. Record:
+// cases for this check are a separate suite, kept in the private sources. Record:
 // PROVENANCE-CHECK.md.
 //
-// In private source B (NOR-357): copied unchanged from private source A, scripts/dco-check.test.mjs. This paragraph is the only edit.
+// In private source B: copied unchanged from private source A, scripts/dco-check.test.mjs. This paragraph is the only edit.
 // Run here by `npm run test:scripts`, one `node --test <file>` per file.
 // Record: PROVENANCE-CHECK.md, section 4.
 //

@@ -1,4 +1,5 @@
-// Lint configuration. NOR-355; design: docs/DESIGN-nor-355-check.md, section 4.
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+// Lint configuration. Design: the check's design note in private source B, section 4.
 //
 // Copied from private source A's eslint.config.js and edited: one TypeScript block over all four
 // TypeScript extensions, one parser project (tsconfig.json), and this repo's

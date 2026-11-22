@@ -2,13 +2,14 @@
 // Windows case — the one the old `file://${argv[1]}` guard got wrong — runs on
 // the POSIX machines too, not only on the Windows CI job.
 //
-// In this repo (private source A, NOR-349): copied unchanged from
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+// In this repo (private source A): copied unchanged from
 // modelcontextprotocol/inspector at commit
 // d330df9617e44ec893bc1a53618662239342d433, scripts/lib/main-module.test.mjs
 // (blob 018271d2f796079b3b428fa9418984b54dc610bc). This block is the only
 // edit. This repo has no Windows CI job. Record: PROVENANCE-CHECK.md.
 //
-// In private source B (NOR-357): copied unchanged from private source A, scripts/lib/main-module.test.mjs. This paragraph is the only edit.
+// In private source B: copied unchanged from private source A, scripts/lib/main-module.test.mjs. This paragraph is the only edit.
 // private source B has no Windows CI job either. Record: PROVENANCE-CHECK.md,
 // section 4.
 //

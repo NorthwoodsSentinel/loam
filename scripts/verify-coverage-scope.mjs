@@ -1,4 +1,4 @@
-// private source B (NOR-355): the MCP Inspector's `scripts/verify-coverage-scope.mjs`
+// private source B: the MCP Inspector's `scripts/verify-coverage-scope.mjs`
 // (modelcontextprotocol/inspector, commit
 // d330df9617e44ec893bc1a53618662239342d433, blob
 // ec119f3d5bc1b91ecdd0b674335abda2ae466237), copied byte-for-byte and then
@@ -6,7 +6,7 @@
 // `PROVENANCE-CHECK.md` has the record. His header follows unchanged; read
 // "client" as "this repository", which has one coverage run at its root.
 //
-// What differs, and why (design: docs/DESIGN-nor-355-check.md, sections 4 and
+// What differs, and why (design: the check's design note in private source B, sections 4 and
 // "Design review r1"):
 //
 //   1. One root run instead of five clients: `CLIENTS`, the client roster and
@@ -36,6 +36,7 @@
 //   5. Vitest is closed exactly once when the config was resolved, even if
 //      reading the resolved options throws.
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B (record:
 // PROVENANCE-CHECK.md), then edited: `EXCLUDED` and `EXCLUDED_PATTERNS` name
 // this repo's files (the four ingest scripts, not yet under the bar, on lines

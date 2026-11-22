@@ -1,14 +1,15 @@
-// Unit tests for scripts/verify-typecheck-coverage.mjs (NOR-355): the
+// Unit tests for scripts/verify-typecheck-coverage.mjs: the
 // comparison of the inventory with the program and the EXCLUDED rules, and
 // that the shipped EXCLUDED entries carry reasons. Codex's attack cases for
-// the guard (14-20) are in tools/attack-inventory.test.ts, against a real
+// the guard (14-20) are a separate suite in private source B, against a real
 // compiler and fake ones. Run via `npm run test:scripts`.
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B, then
 // edited: the last test asks for this repo's follow-up marker instead of
-// private source B's NOR-364, and the cases at the end test loam's one edit to the
+// private source B's ticket number, and the cases at the end test loam's one edit to the
 // guard (several projects, their union). private source B's Codex attack cases
-// (tools/attack-inventory.test.ts there) were not copied; PROVENANCE-CHECK.md
+// were not copied; PROVENANCE-CHECK.md
 // says why.
 
 import { test } from "node:test";
@@ -38,7 +39,7 @@ test("an excluded file passes; reasonless, pattern, untracked and stale entries 
     diffTypecheck({
       tracked: ["a.ts", "b.ts"],
       program: ["a.ts"],
-      excluded: { "b.ts": "NOR-364" },
+      excluded: { "b.ts": "a reason" },
     }),
     [],
   );
@@ -46,9 +47,9 @@ test("an excluded file passes; reasonless, pattern, untracked and stale entries 
     tracked: ["a.ts", "b.ts"],
     program: ["a.ts", "b.ts"],
     excluded: {
-      "c.ts": "NOR-364",
-      "b.ts": "NOR-364",
-      "x/**": "NOR-364",
+      "c.ts": "a reason",
+      "b.ts": "a reason",
+      "x/**": "a reason",
       "a.ts": " ",
     },
   });

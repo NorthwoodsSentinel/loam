@@ -51,7 +51,7 @@
 | 111-112 | New tasks become issues; pace GitHub writes | 112-113 | KEEP | |
 | 114-122 | Responding to Code Reviews | 115-123 | KEEP | |
 | 124 | Heading | 125 | KEEP | |
-| 126 | Coverage bar 90 on four dimensions | 127 | ADAPT | The bar, the tool and the owner's default kept. private source B's history (Bun suite, NOR-364, NOR-375) replaced by loam's fact: the Worker is under the bar with `src/index.test.ts`; the four ingest scripts are excluded until their follow-up. |
+| 126 | Coverage bar 90 on four dimensions | 127 | ADAPT | The bar, the tool and the owner's default kept. private source B's history (its Bun suite and two of its tickets) replaced by loam's fact: the Worker is under the bar with `src/index.test.ts`; the four ingest scripts are excluded until their follow-up. |
 | 127-129 | Unreachable branch; suppress error output; exact filename | 128-130 | KEEP | |
 | 130 | A coverage `include` is a whitelist | 131 | KEEP | The check it names, `scripts/verify-coverage-scope.mjs`, is in this repo (copied, `PROVENANCE-CHECK.md`). |
 | 132-143 | Test-gate timeouts | 133-144 | KEEP | |
@@ -60,7 +60,7 @@
 | 153-164 | Waiting on long-running work | 154-165 | KEEP | |
 | 166-168 | Build output is never a gate target | 167-169 | ADAPT | Where loam's build writes: `dist/`, `.tmp-build/`, `.wrangler/`, and `coverage/`; all in `.gitignore` (`coverage/` added by this change). |
 | 170-171 | Two of the source's reasons | 171-172 | KEEP | |
-| 172 | Never widen an ignore; the dated exception | 173 | ADAPT | The source's sentences kept. private source B's exception (its five files under NOR-375, its vendored courier) replaced by loam's: the four ingest scripts outside coverage, by exact path, on lines citing the follow-up ticket, still to be filed (marker `NOR-388-FOLLOWUP-A`). Nothing is outside format, lint or the typecheck. |
+| 172 | Never widen an ignore; the dated exception | 173 | ADAPT | The source's sentences kept. private source B's exception (five of its files under one of its tickets, its vendored courier) replaced by loam's: the four ingest scripts outside coverage, by exact path, on lines citing the follow-up ticket, still to be filed (marker `NOR-388-FOLLOWUP-A`). Nothing is outside format, lint or the typecheck. |
 | 174-179 | Lint has no warning tier | 175-180 | KEEP | |
 | 181-182 | TypeScript for all new code; recorded exception | 182-184 | ADAPT | private source B's exception (a shell wrapper) replaced by loam's: the copied `.mjs` guards under `scripts/`, which the source and private source B also keep as JavaScript outside lint. |
 | 183-195 | TypeScript bullets; floating promises | 185-196 | KEEP | |

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// private source B (NOR-355): this file is private source A's `scripts/verify-action-pins.mjs`,
+// private source B: this file is private source A's `scripts/verify-action-pins.mjs`,
 // copied byte-for-byte and then edited. private source A's copy is itself the MCP Inspector's guard
 // (modelcontextprotocol/inspector, commit
 // d330df9617e44ec893bc1a53618662239342d433, blob
@@ -7,10 +7,10 @@
 // The commit before the edits holds the unedited copy; `PROVENANCE-CHECK.md`
 // has the record. The Inspector's header follows unchanged below this block,
 // so "#NNNN" numbers are HIS issue numbers and `dependency-refresh` is HIS
-// monthly sweep, which this repo does not have yet (NOR-363).
+// monthly sweep, which this repo does not have yet.
 //
-// What differs from the Inspector, and why (design:
-// docs/DESIGN-nor-355-check.md, section 6):
+// What differs from the Inspector, and why (design: the check's design note in
+// private source B, section 6):
 //
 //   1. EVERY job is checked, not only a credentialed one. In this repo the
 //      checked commit is the one the owner deploys as the Worker, so the
@@ -36,11 +36,12 @@
 // A YAML alias anywhere in a job stays a finding, exactly as he has it and for
 // his stated reason (see `unpinnedRefs`).
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B; record: PROVENANCE-CHECK.md.
 // Edit 1's reason holds here as written: the checked commit is the one the
 // owner deploys as loam's Worker. One edit: the failure message cites
-// AGENTS.md instead of private source B's ticket. The design and ticket numbers
-// above (NOR-355, NOR-363) are private source B's.
+// AGENTS.md instead of private source B's ticket. The design named above
+// is private source B's.
 //
 // ---- his header, unchanged ----
 // Guard: every action a CREDENTIALED job runs is pinned to a commit SHA (#2484).

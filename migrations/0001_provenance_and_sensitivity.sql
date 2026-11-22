@@ -6,7 +6,7 @@
 --   trust_level   how much we trust the content. ingested AI conversations
 --                 should default to untrusted because old conversations may
 --                 carry adversarial prompt-injection content from before
---                 anyone knew to defend against it. lares-substrate (your
+--                 anyone knew to defend against it. Your own substrate (your
 --                 own memory + notes) defaults to trusted.
 --
 --   sensitivity   how careful we should be about who sees this content. four
@@ -36,20 +36,21 @@ ALTER TABLE conversations ADD COLUMN sensitivity TEXT NOT NULL DEFAULT 'personal
 CREATE INDEX IF NOT EXISTS idx_conv_trust       ON conversations(trust_level);
 CREATE INDEX IF NOT EXISTS idx_conv_sensitivity ON conversations(sensitivity);
 
--- Step 3. Promote your own lares-substrate to trusted by default. (Optional;
--- only run if your `source` column uses the lares-* convention from the
--- examples in ingest/files.ts. Comment out or adjust if your source tags
--- differ.)
+-- kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+-- Step 3. Promote your own substrate to trusted by default. (Optional;
+-- only run if you gave your own writing a host-name prefix as its
+-- <source-tag> when running ingest/files.ts, for example `myhost-memory`.
+-- Comment out or adjust if your source tags differ.)
 --
 -- UPDATE conversations SET trust_level = 'trusted'
---   WHERE source LIKE 'lares-%';
+--   WHERE source LIKE 'myhost-%';
 
 -- Step 4. Promote your own self-authored notes to memoir-class if you mark
 -- them with a known prefix. (Example only; adjust to your tagging
 -- convention.)
 --
 -- UPDATE conversations SET sensitivity = 'memoir-class'
---   WHERE source = 'lares-memory' AND title LIKE 'user_%';
+--   WHERE source = 'myhost-memory' AND title LIKE 'user_%';
 
 -- Notes on values:
 --
@@ -60,7 +61,7 @@ CREATE INDEX IF NOT EXISTS idx_conv_sensitivity ON conversations(sensitivity);
 --     mixed      - you partially authored it but the model also contributed.
 --                  most claude.ai and chatgpt history fits here once you've
 --                  stopped worrying about adversarial injection.
---     trusted    - your own writing. lares-substrate, your notes, your
+--     trusted    - your own writing. Your own substrate, your notes, your
 --                  TELOS, your handwritten knowledge.
 --
 --   sensitivity values:

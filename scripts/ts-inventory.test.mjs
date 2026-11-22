@@ -1,8 +1,9 @@
-// Unit tests for scripts/lib/ts-inventory.mjs (NOR-355): which tracked files
+// Unit tests for scripts/lib/ts-inventory.mjs: which tracked files
 // the inventory requires, and that it reads Git's NUL-delimited output.
-// Codex's attack cases for it (11-14) are in tools/attack-inventory.test.ts.
+// Codex's attack cases for it (11-14) are a separate suite in private source B.
 // Run via `npm run test:scripts`, which names this file by path.
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B; record: PROVENANCE-CHECK.md.
 // This paragraph is the only edit; the comments above it are private source B's,
 // and their ticket numbers and file references are that repo's.
