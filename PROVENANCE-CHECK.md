@@ -44,13 +44,13 @@ Source repo: private source B. private source B's own record of where each came 
 | --- | --- | --- |
 | `AGENTS.md` | private source B `AGENTS.md` | Line by line in `PROVENANCE.md`. Not committed byte-for-byte first: private source B's text names private infrastructure that does not belong in a public repo's history |
 | `tsconfig.tools.json` | private source A `tsconfig.tools.json` | A second project beside the Worker's, with Node's types instead of Bun's; `include` names `vitest.config.ts` |
-| `src/index.test.ts` | private source A `src/index.test.ts` (NOR-366) | The method: call the Worker's `fetch` on Node with a fake D1 binding, because Cloudflare's Vitest integration does not support V8 coverage. The cases are loam's |
+| `src/index.test.ts` | private source A `src/index.test.ts` | The method: call the Worker's `fetch` on Node with a fake D1 binding, because Cloudflare's Vitest integration does not support V8 coverage. The cases are loam's |
 | `package.json` scripts | private source B and private source A `package.json` | Script names and the `validate` / `coverage` / `local:gate` split; `dco:check`, `local:dco`; devDependency ranges and exact pins as private source B and private source A have them (`vitest` and `@vitest/coverage-v8` 4.1.12 and `prettier` 3.8.4 exact); private source A's `overrides` entry for `minimatch`; `yaml`, which `verify-action-pins.mjs` imports |
 | `package.json` `build` | private source B's `build` (`wrangler deploy --dry-run --outdir dist`) | Run against a copy of `wrangler.jsonc.template` in `.tmp-build/` (already in `.gitignore`), because `wrangler.jsonc` is the user's own file and the template's extension is not one wrangler reads |
 
 ## 3. Not copied, and why
 
-- private source B's Codex attack-case suites (`tools/action-pins.attack.test.ts`, `tools/dco.attack.test.ts`, `tools/attack-*.test.ts`) and the designs they belong to (`docs/DESIGN-nor-349-signoff.md`, `docs/DESIGN-nor-355-check.md` and their attack-case files). They were written against private source B's and private source A's configuration (their `local:gate` lines, file counts and fixtures) and would need rewriting, not copying; the guards' own `node --test` suites came with them. Several file headers above still name these files; they live in private source B.
+- private source B's Codex attack-case suites and the design notes they belong to. They were written against private source B's and private source A's configuration (their `local:gate` lines, file counts and fixtures) and would need rewriting, not copying; the guards' own `node --test` suites came with them. The file headers above refer to them without naming them; they live in the private sources.
 - `scripts/smoke-inspector.mjs` and the `client-smoke` skill: loam is not an MCP server.
 - `scripts/verify-skills.mjs`: loam has no skills; `AGENTS.md` says the first skill brings it.
 
@@ -77,3 +77,17 @@ Three changes went beyond a name or an id:
 - Section 6 above: its last sentence, about another repository's copies, was removed. It was no longer true.
 
 History is unchanged. This is a change to the files as they stand, not a rewrite of earlier commits.
+
+## 8. The remaining private identifiers removed (NOR-700)
+
+On 2026-11-22 three more kinds of private identifier were taken out of the tracked files:
+
+- **A machine name** used as an example of a `source` naming convention in the comments of `migrations/0001_provenance_and_sensitivity.sql`. The examples now use `myhost`. Only comments changed; no statement of the migration did. One comment also said the convention came from examples in `ingest/files.ts`, which has none, and now describes the `<source-tag>` argument that script takes.
+- **Ticket numbers of the two private sources** in the copied file headers and in two rows of `PROVENANCE.md`. This repository's own ticket numbers are kept.
+- **Paths of files that exist only in the private sources:** two design notes and the review's attack-case suites. The headers now refer to them in words.
+
+One change is not a comment: `scripts/verify-typecheck-coverage.test.mjs` used a private ticket number as a made-up reason string in a fixture, four times. It is now `"a reason"`. The test checks that an entry has a non-empty reason, so it tests the same thing.
+
+Left as it is: `.test-report` in the ignore list of `scripts/lib/ts-inventory.mjs`. It is a directory name in code, and removing it would change what the guard reads.
+
+History is unchanged, as in section 7.

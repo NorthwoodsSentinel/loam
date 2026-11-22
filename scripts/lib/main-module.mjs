@@ -19,14 +19,15 @@
 // The platform is a parameter so the Windows case is exercised on the POSIX
 // machines that run this suite, the same pattern as `win-shell-args.mjs`.
 //
-// In this repo (private source A, NOR-349): copied unchanged from
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+// In this repo (private source A): copied unchanged from
 // modelcontextprotocol/inspector at commit
 // d330df9617e44ec893bc1a53618662239342d433, scripts/lib/main-module.mjs (blob
 // 45a6baf3ebc1812fd8b4d7910b2cf3d77a2d7610), because scripts/dco-check.mjs
 // imports it. The scripts named above are the source's. Record:
 // PROVENANCE-CHECK.md.
 //
-// One edit to his code, found by Codex attack case 21 (NOR-349): the entry
+// One edit to his code, found by Codex attack case 21: the entry
 // path is ALSO compared after resolving symlinks. Node gives the entry module
 // an `import.meta.url` built from the file's REAL path (unless
 // `--preserve-symlinks-main`), while `process.argv[1]` keeps the path as
@@ -38,7 +39,7 @@
 // or it is a Windows path given to a POSIX machine in a test) falls back to
 // his behaviour alone.
 //
-// In private source B (NOR-357): copied unchanged from private source A, scripts/lib/main-module.mjs, private source A's symlink edit above
+// In private source B: copied unchanged from private source A, scripts/lib/main-module.mjs, private source A's symlink edit above
 // included. This paragraph is the only edit. Record: PROVENANCE-CHECK.md,
 // section 4.
 //
@@ -68,7 +69,7 @@ export function isMainModule(
   const asUrl = (file) =>
     pathToFileURL(file, { windows: platform === "win32" }).href;
   if (importMetaUrl === asUrl(argv1)) return true;
-  // NOR-349 edit (see header): compare the symlink-resolved path too.
+  // The symlink edit (see header): compare the symlink-resolved path too.
   let real;
   try {
     real = realpathSync(argv1);

@@ -1,4 +1,4 @@
-// private source B (NOR-355): the MCP Inspector's `scripts/verify-coverage-scope.test.mjs`
+// private source B: the MCP Inspector's `scripts/verify-coverage-scope.test.mjs`
 // (modelcontextprotocol/inspector d330df9617e44ec893bc1a53618662239342d433,
 // blob 4f4f97e528e88b1472fb44d35e6abd4552b4060c), copied byte-for-byte and
 // then edited with the guard. His tests of `expandCoverageScope` and
@@ -6,8 +6,9 @@
 // with the roster (one root run here). His three `run()` tests are kept in
 // substance against the one-root `run()`: a complete report passes, the
 // vitest-5 collapse fails, a missing summary fails. Codex's cases for the
-// guard (21-30) are in tools/attack-coverage.test.ts.
+// guard (21-30) are a separate suite in private source B.
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B, then
 // edited in one line: the report names this repository ("loam: 2 of 3"). The
 // Codex attack cases named above stay in private source B; PROVENANCE-CHECK.md says

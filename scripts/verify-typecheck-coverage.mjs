@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // verify:typecheck-coverage — every tracked TypeScript file gets a `tsc` pass,
-// or is named in EXCLUDED with its reason. NOR-355; design:
-// docs/DESIGN-nor-355-check.md, "Every tracked TypeScript file is typechecked
+// or is named in EXCLUDED with its reason. Design: the check's design
+// note in private source B, "Every tracked TypeScript file is typechecked
 // and coverage-measured, or named" (Codex design review r1, finding 1).
 //
 // ADAPTED from phase 2 of the MCP Inspector's scripts/verify-typecheck-coverage.mjs
@@ -25,6 +25,7 @@
 // (resolved, realpath'd, repo-relative), so a symlinked checkout passes and a
 // `<repo>-copy/...` path cannot stand for an in-repo file.
 //
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
 // In loam (NOR-388): copied byte-for-byte from private source B (record:
 // PROVENANCE-CHECK.md), then edited. One edit: loam has three TypeScript
 // projects, not one (the Worker under Cloudflare's types, the ingest scripts
@@ -47,8 +48,8 @@ const repoRoot = path.resolve(
 );
 
 /**
- * Exact repo-relative path → reason. Empty since NOR-364 brought the last
- * excluded files into the program.
+ * Exact repo-relative path → reason. Empty since the last excluded files
+ * were brought into the program.
  *
  * @type {Record<string, string>}
  */

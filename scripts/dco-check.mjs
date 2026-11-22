@@ -34,7 +34,8 @@
 // PR: everything reachable from head that the base branch does not already
 // contain.
 //
-// --- In this repo (private source A, NOR-349) ----------------------------------------
+// kintsugi: NOR-700. the furrows still bore another field's stakes — / now each row is named in its own soil.
+// --- In this repo (private source A) ----------------------------------------
 // Copied from modelcontextprotocol/inspector at commit
 // d330df9617e44ec893bc1a53618662239342d433, scripts/dco-check.mjs (blob
 // 04446dc9dd80cd304752b811d5bae24492f4e152), by copy then edit. The comments
@@ -44,9 +45,9 @@
 // workflow is `.github/workflows/dco.yml` and the local stage is
 // `npm run local:dco` (`--base origin/main`). Edits, one: the example in the
 // `--base` error message names `origin/main`. Design and reasons:
-// docs/DESIGN-nor-349-signoff.md; record: PROVENANCE-CHECK.md.
+// the sign-off design note in private source A; record: PROVENANCE-CHECK.md.
 //
-// --- In private source B (NOR-357) ------------------------------------------------
+// --- In private source B ------------------------------------------------
 // Copied unchanged from private source A, scripts/dco-check.mjs. This
 // paragraph is the only edit. The block above is private source A's and holds here as
 // written: `main` is this repo's develop branch too (AGENTS.md, branch table),
