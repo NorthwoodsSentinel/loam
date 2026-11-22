@@ -19,7 +19,7 @@
 // The platform is a parameter so the Windows case is exercised on the POSIX
 // machines that run this suite, the same pattern as `win-shell-args.mjs`.
 //
-// In this repo (WALL-E, NOR-349): copied unchanged from
+// In this repo (private source A, NOR-349): copied unchanged from
 // modelcontextprotocol/inspector at commit
 // d330df9617e44ec893bc1a53618662239342d433, scripts/lib/main-module.mjs (blob
 // 45a6baf3ebc1812fd8b4d7910b2cf3d77a2d7610), because scripts/dco-check.mjs
@@ -38,15 +38,12 @@
 // or it is a Windows path given to a POSIX machine in a test) falls back to
 // his behaviour alone.
 //
-// In fleet-mcp (NOR-357): copied unchanged from NorthwoodsSentinel/walle
-// origin/main 5fb8747, scripts/lib/main-module.mjs (blob
-// b87aa54ce26ce2877f5814369d378373074f1d18), WALL-E's symlink edit above
+// In private source B (NOR-357): copied unchanged from private source A, scripts/lib/main-module.mjs, private source A's symlink edit above
 // included. This paragraph is the only edit. Record: PROVENANCE-CHECK.md,
 // section 4.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob b35c2374c50999bf1f5a1a2fd19d990ff960b63f); record: PROVENANCE-CHECK.md.
-// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// In loam (NOR-388): copied byte-for-byte from private source B; record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are private source B's,
 // and their ticket numbers and file references are that repo's.
 
 import { realpathSync } from "node:fs";

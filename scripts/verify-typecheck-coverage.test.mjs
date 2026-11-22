@@ -4,11 +4,10 @@
 // the guard (14-20) are in tools/attack-inventory.test.ts, against a real
 // compiler and fake ones. Run via `npm run test:scripts`.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob 719fcbcbf856e2fb06c743ea062c4ddd9e928f24), then
+// In loam (NOR-388): copied byte-for-byte from private source B, then
 // edited: the last test asks for this repo's follow-up marker instead of
-// fleet-mcp's NOR-364, and the cases at the end test loam's one edit to the
-// guard (several projects, their union). fleet-mcp's Codex attack cases
+// private source B's NOR-364, and the cases at the end test loam's one edit to the
+// guard (several projects, their union). private source B's Codex attack cases
 // (tools/attack-inventory.test.ts there) were not copied; PROVENANCE-CHECK.md
 // says why.
 

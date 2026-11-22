@@ -1,6 +1,5 @@
 # Files `npm run format` and `npm run format:check` leave alone.
-# Copied byte-for-byte from NorthwoodsSentinel/fleet-mcp origin/main f1bea96
-# (blob 5c8bf4c839ca30b13bef0bcb7272372a81ba5fe0), which copied WALL-E's, and
+# Copied byte-for-byte from private source B, which copied private source A's, and
 # edited for loam (NOR-388): no vendored code and no Bun report here; the
 # dry-run build's scratch copy added. Prettier also skips everything in
 # .gitignore (node_modules, .wrangler, .tmp-build, dist).

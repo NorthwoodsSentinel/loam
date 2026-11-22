@@ -1,16 +1,15 @@
-// fleet-mcp (NOR-355): WALL-E's copy of this file (NorthwoodsSentinel/walle
-// origin/main 5fb8747, blob 8f5d0115a688dc9853956d06739e876ad514d870), copied
-// byte-for-byte with the guard and kept as WALL-E has it: the guard's
-// messages these tests match did not change. WALL-E's header follows. The
+// private source B (NOR-355): private source A's copy of this file, copied
+// byte-for-byte with the guard and kept as private source A has it: the guard's
+// messages these tests match did not change. private source A's header follows. The
 // Codex cases written for this repo (NOR-355) are in tools/attack-pins.test.ts.
 //
-// WALL-E (NOR-340): the MCP Inspector's `scripts/verify-action-pins.test.mjs`,
+// private source A (NOR-340): the MCP Inspector's `scripts/verify-action-pins.test.mjs`,
 // copied byte-for-byte (modelcontextprotocol/inspector at
 // d330df9617e44ec893bc1a53618662239342d433, blob
 // 13f7bada92f7b1b1f91654ec0cc30f95b3b09708) and then edited with the guard.
 // His 17 tests are all kept. Four have new expectations because this repo
 // checks EVERY job and treats a local `./…` ref as a finding (each is marked
-// "WALL-E:" below); three are added at the end for the empty directory, the
+// "private source A:" below); three are added at the end for the empty directory, the
 // non-workflow file and the symlinked workflow. His tests of
 // `credentialedJobs` are unchanged. Run here by `npm run test:scripts`, which
 // names this file by path: `node --test` exits 0 on a glob that matches
@@ -23,9 +22,8 @@
 // workflow discovery and the exit status are covered too.
 // Run via `npm run test:scripts`.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob 82686195e6538f7f2f7fad30bf62a4701d2ed630); record: PROVENANCE-CHECK.md.
-// This paragraph is the only edit; the comments above it are fleet-mcp's,
+// In loam (NOR-388): copied byte-for-byte from private source B; record: PROVENANCE-CHECK.md.
+// This paragraph is the only edit; the comments above it are private source B's,
 // and their ticket numbers and file references are that repo's.
 
 import { test } from "node:test";
@@ -244,7 +242,7 @@ test("an upload is not credentialed when the consumer downloads nothing", () => 
   assert.deepEqual([...credentialedJobs(yaml)], ["publish"]);
 });
 
-// WALL-E: was "…in credentialed jobs only". Every job is checked here, so the
+// private source A: was "…in credentialed jobs only". Every job is checked here, so the
 // uncredentialed `lint` job's tag is a finding too.
 test("unpinnedRefs flags tags and comment-less SHAs in every job", () => {
   const yaml = wf(
@@ -267,7 +265,7 @@ test("unpinnedRefs flags tags and comment-less SHAs in every job", () => {
   ]);
 });
 
-// WALL-E: the local `./…` workflow call is a finding here, not a skip.
+// private source A: the local `./…` workflow call is a finding here, not a skip.
 test("a credentialed reusable-workflow call must pin its own ref", () => {
   const yaml = wf(
     "jobs:",
@@ -290,7 +288,7 @@ test("a credentialed reusable-workflow call must pin its own ref", () => {
   ]);
 });
 
-// WALL-E: every job is checked, so the alias in `lint` is a finding as well.
+// private source A: every job is checked, so the alias in `lint` is a finding as well.
 test("a YAML alias in a credentialed job is a finding, not a pass", () => {
   const yaml = wf(
     "x-refs:",
@@ -315,7 +313,7 @@ test("a YAML alias in a credentialed job is a finding, not a pass", () => {
   ]);
 });
 
-// WALL-E: the local `./…` action in the third step is a finding here.
+// private source A: the local `./…` action in the third step is a finding here.
 test("a version comment must name an exact release", () => {
   const yaml = wf(
     "jobs:",
@@ -392,7 +390,7 @@ test(
   }),
 );
 
-// ---- WALL-E additions (NOR-340) ----
+// ---- private source A additions (NOR-340) ----
 
 test(
   "main fails when the workflow directory holds no workflow file",

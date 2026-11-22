@@ -1,8 +1,7 @@
 // Vitest configuration: which tests run, and the per-file coverage bar.
 // loam, NOR-388.
 //
-// Copied byte-for-byte from NorthwoodsSentinel/fleet-mcp origin/main f1bea96
-// (blob 958b47b52ac48db4b1cc47eb74f3789f37aa8aa4), which copied WALL-E's, and
+// Copied byte-for-byte from private source B, which copied private source A's, and
 // edited for loam; record: PROVENANCE-CHECK.md. Vitest and its V8 coverage
 // provider are the MCP Inspector's test tools at its exact pins (4.1.12).
 //
@@ -23,12 +22,12 @@
 // there.
 //
 // The Worker's tests run on Node, calling its exported `fetch` handler with a
-// fake D1 binding (WALL-E's way, src/index.test.ts there): Cloudflare's own
+// fake D1 binding (private source A's way, src/index.test.ts there): Cloudflare's own
 // Vitest integration does not support V8 coverage, and the bar is measured
 // with V8.
 //
 // `testTimeout` is stated once, here (AGENTS.md: budgets are chosen values,
-// stated once). 30 s, WALL-E's and fleet-mcp's value, kept although loam's
+// stated once). 30 s, private source A's and private source B's value, kept although loam's
 // tests start no processes; it is a hung-test guard. `retry` stays unset: a
 // retry would turn a real red into a quiet green.
 
@@ -49,7 +48,7 @@ export default defineConfig({
       exclude: [
         // Test files are not code under test.
         "**/*.test.ts",
-        // Configuration, not code under test (as walle has it).
+        // Configuration, not code under test.
         "vitest.config.ts",
         // NOR-388-FOLLOWUP-A (the follow-up to NOR-388; ticket not yet filed):
         // existing ingest scripts, top-level CLIs with no exported function to

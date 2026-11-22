@@ -25,8 +25,7 @@
 // (resolved, realpath'd, repo-relative), so a symlinked checkout passes and a
 // `<repo>-copy/...` path cannot stand for an in-repo file.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob fd9163fdd668cf2ead9aeb10040a0227ed43d20a; record:
+// In loam (NOR-388): copied byte-for-byte from private source B (record:
 // PROVENANCE-CHECK.md), then edited. One edit: loam has three TypeScript
 // projects, not one (the Worker under Cloudflare's types, the ingest scripts
 // under Node's, and the test configuration), so `PROJECTS` names them,
