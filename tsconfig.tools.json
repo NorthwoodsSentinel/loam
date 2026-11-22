@@ -2,8 +2,7 @@
   // Typecheck project for what is neither the Worker nor an ingest script:
   // today, vitest.config.ts. loam, NOR-388.
   //
-  // Written from WALL-E's tsconfig.tools.json (NorthwoodsSentinel/walle
-  // origin/main a7d94c2, blob 125be0b736eed576fd95cbf6fe3edae33daf8207), the
+  // Written from private source A's tsconfig.tools.json, the
   // org's example of a second project beside a Worker's: the Worker keeps
   // tsconfig.json, whose `types` are Cloudflare's, and these files run on
   // Node, so they need a project with different globals. Edited: Node's types

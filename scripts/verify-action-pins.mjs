@@ -1,11 +1,9 @@
 #!/usr/bin/env node
-// fleet-mcp (NOR-355): this file is WALL-E's `scripts/verify-action-pins.mjs`
-// (NorthwoodsSentinel/walle, origin/main 5fb8747, blob
-// 9aea9a383b72c27d422584e1224bd6de3baa415b), copied byte-for-byte and then
-// edited. WALL-E's copy is itself the MCP Inspector's guard
+// private source B (NOR-355): this file is private source A's `scripts/verify-action-pins.mjs`,
+// copied byte-for-byte and then edited. private source A's copy is itself the MCP Inspector's guard
 // (modelcontextprotocol/inspector, commit
 // d330df9617e44ec893bc1a53618662239342d433, blob
-// a8988d38a3f9633c47f2bdad6e63045ca6f21db2) with WALL-E's edits 1-5 below.
+// a8988d38a3f9633c47f2bdad6e63045ca6f21db2) with private source A's edits 1-5 below.
 // The commit before the edits holds the unedited copy; `PROVENANCE-CHECK.md`
 // has the record. The Inspector's header follows unchanged below this block,
 // so "#NNNN" numbers are HIS issue numbers and `dependency-refresh` is HIS
@@ -30,22 +28,19 @@
 //   5. `SHA_REF` is defined here instead of imported from his
 //      `dependency-refresh.mjs` (line 111 of blob cd042802), which is not
 //      brought in.
-//   6. (fleet-mcp) Each entry is opened ONCE, with O_NOFOLLOW and O_NONBLOCK,
-//      and checked with fstat on that descriptor before it is read. WALL-E's
-//      copy checked the path with lstat and then re-opened the path to read
-//      it; WALL-E's final Codex audit (finding 1, HIGH) showed a symlink
-//      swapped in between is followed. One descriptor removes the window;
-//      O_NONBLOCK keeps a FIFO from hanging the gate.
+//   6. (private source B) Each entry is opened ONCE, with O_NOFOLLOW and O_NONBLOCK,
+//      and checked with fstat on that descriptor before it is read, so the
+//      file that is checked is the file that is read. O_NONBLOCK keeps a
+//      FIFO from hanging the gate.
 //
 // A YAML alias anywhere in a job stays a finding, exactly as he has it and for
 // his stated reason (see `unpinnedRefs`).
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob 011a04c44ce9769bd15f8bfa82cb27d89162e957); record: PROVENANCE-CHECK.md.
+// In loam (NOR-388): copied byte-for-byte from private source B; record: PROVENANCE-CHECK.md.
 // Edit 1's reason holds here as written: the checked commit is the one the
 // owner deploys as loam's Worker. One edit: the failure message cites
-// AGENTS.md instead of fleet-mcp's ticket. The design and ticket numbers
-// above (NOR-355, NOR-363) are fleet-mcp's.
+// AGENTS.md instead of private source B's ticket. The design and ticket numbers
+// above (NOR-355, NOR-363) are private source B's.
 //
 // ---- his header, unchanged ----
 // Guard: every action a CREDENTIALED job runs is pinned to a commit SHA (#2484).

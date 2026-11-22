@@ -1,8 +1,8 @@
 // Tests of the Worker (src/index.ts). NOR-388.
 //
 // They run on Node under Vitest, calling the Worker's exported `fetch` handler
-// directly, as WALL-E's src/index.test.ts does (NorthwoodsSentinel/walle,
-// NOR-366). Node has the same Request, Response and URL globals the handler
+// directly, as private source A's src/index.test.ts does
+// (NOR-366). Node has the same Request, Response and URL globals the handler
 // uses. Cloudflare's own Vitest integration was not used: its known-issues
 // page says V8 coverage is not supported, and this repo's coverage bar is
 // measured with V8 (vitest.config.ts).

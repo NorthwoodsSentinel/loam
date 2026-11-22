@@ -1,7 +1,6 @@
 # CI for loam (NOR-388).
 #
-# Copied byte-for-byte from NorthwoodsSentinel/fleet-mcp origin/main f1bea96
-# (blob 7932a098e637e270effd73a6bb05c2ce8b7a9108), which took it from WALL-E,
+# Copied byte-for-byte from private source B, which took it from private source A,
 # which took its shape from the MCP Inspector's CI workflow (its
 # .github/workflows/main.yml at commit d330df96): the same file name and
 # workflow name, the same least-privilege `permissions`, one pinned runtime
@@ -13,7 +12,7 @@
 # runs before pushing, except `local:dco`: `validate` (pin guard, the guards'
 # own tests, format check, lint, typecheck and its coverage guard, Vitest
 # tests, the dry-run build), then `coverage` (per-file coverage and its scope
-# guard). The run line names the stages rather than `local:gate`, as WALL-E's
+# guard). The run line names the stages rather than `local:gate`, as private source A's
 # and the Inspector's do; nothing checks that the two stay aligned, so edit
 # them together. `local:dco` reads `origin/main`, which this shallow checkout
 # does not have, so it stays local (the Inspector's reason, its
@@ -54,7 +53,7 @@ permissions:
 
 env:
   # The one pinned runtime, stated once (the Inspector's pattern for its npm
-  # pin). loam declares Node >= 22 (package.json `engines`, NOR-155). fleet-mcp
+  # pin). loam declares Node >= 22 (package.json `engines`, NOR-155). private source B
   # pins Bun here; loam's gate runs no Bun (the ingest scripts are run by hand
   # with Bun, but the gate only typechecks them), so Bun is not installed.
   CI_NODE_VERSION: "22.x"
@@ -70,7 +69,7 @@ jobs:
     # written. The rule is roughly twice the slowest observed run, rounded up
     # to the next five minutes, stated with the range it was read from. The
     # only measurement so far is local: the stages took under a minute on a
-    # developer Mac once installed. 10 minutes is WALL-E's and fleet-mcp's
+    # developer Mac once installed. 10 minutes is private source A's and private source B's
     # provisional value, a hung-job guard, not a flake remedy. Re-size it from
     # observed runs, with the range, once there are some. Vitest's per-test
     # budget (30 s, vitest.config.ts) is far smaller, so it fires first.
@@ -95,7 +94,7 @@ jobs:
 
       - name: Install dependencies
         # From this repo's lockfile (package-lock.json, committed by NOR-155),
-        # WALL-E's `npm ci`, and without running any dependency's install
+        # private source A's `npm ci`, and without running any dependency's install
         # script: nothing the gate runs needs one.
         run: npm ci --ignore-scripts
 

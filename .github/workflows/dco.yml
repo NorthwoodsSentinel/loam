@@ -79,28 +79,25 @@
 # issue numbers in it are his repo's. Every edit is listed in
 # docs/DESIGN-nor-349-signoff.md, section 3; record: PROVENANCE-CHECK.md.
 #
-# In fleet-mcp (NOR-357): copied from NorthwoodsSentinel/walle origin/main
-# 5fb8747, .github/workflows/dco.yml (blob
-# 83356971c4352fe1d27fd4c62d74b61a3fa43ef7). The design named above is
-# WALL-E's, kept verbatim in docs/. Edits, comments only: the ruleset
+# In private source B (NOR-357): copied from private source A,
+# .github/workflows/dco.yml. The design named above is private source A's, kept verbatim in docs/. Edits, comments only: the ruleset
 # paragraph (this repo has none yet, NOR-356), who merges (this repo's
 # Contributing rule), where `main`'s role is recorded, the push step's
 # ruleset remark, and this paragraph.
-# Triggers, jobs, steps and pins are WALL-E's unchanged. The push job's range
+# Triggers, jobs, steps and pins are private source A's unchanged. The push job's range
 # is `before..after`, so the unsigned commits from before this repo's rules
 # file, all reachable from `before`, are never in it. Record:
 # PROVENANCE-CHECK.md, section 4.
 #
-# In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-# origin/main f1bea96 (blob 9d3165be6059d7798e32719ccb1510ba5db2294c), then
+# In loam (NOR-388): copied byte-for-byte from private source B, then
 # edited. Everything above this paragraph holds here as written, with
-# fleet-mcp's ticket numbers read as follows: loam has no ruleset either (the
+# private source B's ticket numbers read as follows: loam has no ruleset either (the
 # owner's act; the PR that brought this file names the one to apply), and its
 # unsigned history before NOR-388 is excluded from the push job the same way.
-# The design named above is WALL-E's (NorthwoodsSentinel/walle docs/) and is
+# The design named above is private source A's (in its docs/) and is
 # not copied here. One edit to a step: loam is PUBLIC, so the PR job's base
 # checkout goes back to the source's `persist-credentials: false` (the
-# fleet-mcp reason for `true`, a private repo's authenticated fetch, does not
+# private source B reason for `true`, a private repo's authenticated fetch, does not
 # hold; a public repo's `refs/pull/<N>/head` fetches without a credential).
 # Record: PROVENANCE-CHECK.md.
 name: DCO
@@ -137,7 +134,7 @@ jobs:
           ref: ${{ github.base_ref }}
           fetch-depth: 0
           # The source's value. loam is public, so the next step's second
-          # `git fetch origin` needs no credential (fleet-mcp, a private repo,
+          # `git fetch origin` needs no credential (private source B, a private repo,
           # set `true` here). A failed fetch fails the step: red, never green.
           persist-credentials: false
 

@@ -1,7 +1,6 @@
 // Lint configuration. NOR-355; design: docs/DESIGN-nor-355-check.md, section 4.
 //
-// Copied from WALL-E's eslint.config.js (NorthwoodsSentinel/walle origin/main
-// 5fb8747, blob 109d7e55) and edited: one TypeScript block over all four
+// Copied from private source A's eslint.config.js and edited: one TypeScript block over all four
 // TypeScript extensions, one parser project (tsconfig.json), and this repo's
 // ignore list. The rule set is the MCP Inspector's root config (eslint.config.js
 // at d330df96, blob 9990e974), reduced to one scope: `js.configs.recommended`,
@@ -14,14 +13,13 @@
 // The parser is given tsconfig.json. A TypeScript file outside that project
 // fails lint with "was not found in any of the provided project(s)".
 //
-// The `.mjs` files under scripts/ are not linted, as in WALL-E and the
+// The `.mjs` files under scripts/ are not linted, as in private source A and the
 // Inspector (his lint scopes do not cover `scripts/`); they are
 // format-checked and tested under `node --test`.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob 24be32c48853228cc0437f8d82fe728a6ef0d566), then
+// In loam (NOR-388): copied byte-for-byte from private source B, then
 // edited: three parser projects instead of one (loam's Worker, its ingest
-// scripts and its test configuration each have their own tsconfig, as WALL-E
+// scripts and its test configuration each have their own tsconfig, as private source A
 // names two), so a TypeScript file in none of them fails lint; and loam's
 // ignore list (no vendored code, no Bun report; `.tmp-build/`, where the
 // dry-run build copies the wrangler template). The rule set is unchanged.

@@ -1,4 +1,4 @@
-// fleet-mcp (NOR-355): the MCP Inspector's `scripts/verify-coverage-scope.test.mjs`
+// private source B (NOR-355): the MCP Inspector's `scripts/verify-coverage-scope.test.mjs`
 // (modelcontextprotocol/inspector d330df9617e44ec893bc1a53618662239342d433,
 // blob 4f4f97e528e88b1472fb44d35e6abd4552b4060c), copied byte-for-byte and
 // then edited with the guard. His tests of `expandCoverageScope` and
@@ -8,10 +8,9 @@
 // vitest-5 collapse fails, a missing summary fails. Codex's cases for the
 // guard (21-30) are in tools/attack-coverage.test.ts.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob 34d5bb9a0dd2accf33ffbd51557b7f9a009ecb0e), then
+// In loam (NOR-388): copied byte-for-byte from private source B, then
 // edited in one line: the report names this repository ("loam: 2 of 3"). The
-// Codex attack cases named above stay in fleet-mcp; PROVENANCE-CHECK.md says
+// Codex attack cases named above stay in private source B; PROVENANCE-CHECK.md says
 // why they were not copied.
 //
 // ---- his header, unchanged ----
@@ -252,7 +251,7 @@ test("an omission for a file the report now measures is flagged as stale", () =>
   assert.match(failures[0], /which the report now measures/);
 });
 
-// fleet-mcp: the roster tests are removed with the roster. The fixture below
+// private source B: the roster tests are removed with the roster. The fixture below
 // is his, moved to the repo root: one declaration matching three files, two
 // of them outside `server/**`.
 function makeRootFixture() {

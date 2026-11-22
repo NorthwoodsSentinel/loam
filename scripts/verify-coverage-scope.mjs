@@ -1,4 +1,4 @@
-// fleet-mcp (NOR-355): the MCP Inspector's `scripts/verify-coverage-scope.mjs`
+// private source B (NOR-355): the MCP Inspector's `scripts/verify-coverage-scope.mjs`
 // (modelcontextprotocol/inspector, commit
 // d330df9617e44ec893bc1a53618662239342d433, blob
 // ec119f3d5bc1b91ecdd0b674335abda2ae466237), copied byte-for-byte and then
@@ -36,12 +36,11 @@
 //   5. Vitest is closed exactly once when the config was resolved, even if
 //      reading the resolved options throws.
 //
-// In loam (NOR-388): copied byte-for-byte from NorthwoodsSentinel/fleet-mcp
-// origin/main f1bea96 (blob d7942703ca4f96128fa78ef31f2383862b8ce400; record:
+// In loam (NOR-388): copied byte-for-byte from private source B (record:
 // PROVENANCE-CHECK.md), then edited: `EXCLUDED` and `EXCLUDED_PATTERNS` name
 // this repo's files (the four ingest scripts, not yet under the bar, on lines
 // citing the follow-up ticket; the test files; the Vitest config), and the
-// report names this repository. The guard's logic is fleet-mcp's unchanged.
+// report names this repository. The guard's logic is private source B's unchanged.
 //
 /**
  * Guards the file set each client's coverage run measures (#2709).
@@ -134,7 +133,7 @@ export const EXCLUDED = {
   "ingest/claude.ts": FOLLOWUP,
   "ingest/files.ts": FOLLOWUP,
   "ingest/gemini.ts": FOLLOWUP,
-  "vitest.config.ts": "configuration, not code under test (as walle has it)",
+  "vitest.config.ts": "configuration, not code under test",
 };
 
 /**
@@ -144,7 +143,7 @@ export const EXCLUDED = {
  * @type {Record<string, string>}
  */
 export const EXCLUDED_PATTERNS = {
-  "**/*.test.ts": "test files are not code under test (as walle has it)",
+  "**/*.test.ts": "test files are not code under test",
 };
 
 /**
